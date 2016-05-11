@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div id="tester" style="width:600px;height:250px;"></div>
+		<!-- plot.ly -->
+		<script src="js/plotly-latest.min.js"></script>
+		<!--<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="https://cdn.plot.ly/plotly-1.2.0.min.js"></script>-->		
+		<script>
+			//peut-être l'isoler dans un .js à part ?
+			var data = [{
+			x: [1, 2, 3, 4, 5],
+			y: [1, 2, 4, 8, 16],
+			mode: 'markers',
+			marker: {
+			size: [40, 60, 80, 100, 50]
+			} }]
+			TESTER = document.getElementById('tester');
+			Plotly.plot( TESTER, data,{
+			margin: { t:0 }});
+		</script>
+		<!--<script src="js/plotlyTest.js"></script>-->
+	</body>
+</html>
