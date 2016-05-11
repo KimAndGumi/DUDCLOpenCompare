@@ -16,7 +16,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Created by gbecan on 02/12/15.
+ * Created by Néréide, Cédric, Jérémie, Nirina & Soleil
+ * commit > pull > push !
  */
 public class GettingStartedTest {
 
@@ -26,7 +27,7 @@ public class GettingStartedTest {
     	
     	
         // Define a file representing a PCM to load
-        File pcmFile = new File("pcms/example.pcm");
+        File pcmFile = new File("pcms/Comparison_of_anaerobic_and_aerobic_digestion_0.pcm"); //"pcms/example.pcm"
 
 
         // Create a loader that can handle the file format
