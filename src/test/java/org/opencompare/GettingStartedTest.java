@@ -6,7 +6,9 @@ import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.CSVExporter;
 import org.opencompare.api.java.io.PCMLoader;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,6 +26,7 @@ public class GettingStartedTest {
         // Define a file representing a PCM to load
         File pcmFile = new File("pcms/example.pcm");
 
+
         // Create a loader that can handle the file format
         PCMLoader loader = new KMFJSONLoader();
 
@@ -32,13 +35,21 @@ public class GettingStartedTest {
         // A PCM container encapsulates a PCM and its associated metadata
         List<PCMContainer> pcmContainers = loader.load(pcmFile);
 
+        FileWriter fw = new FileWriter("html/monHtml.html", false);
+		BufferedWriter output = new BufferedWriter(fw);
+        
         for (PCMContainer pcmContainer : pcmContainers) {
 
             // Get the PCM
             PCM pcm = pcmContainer.getPcm();
-
+            
+            output.write("<H1>"+pcm.getName()+"</H1>");
+            output.write("<H2>"+pcm.getProducts().size()+" éléments</H2>");
+            output.write("<ul>");
             // Browse the cells of the PCM
             for (Product product : pcm.getProducts()) {
+                output.write("<li>"+product.getKeyContent()+"</li>");
+                
                 for (Feature feature : pcm.getConcreteFeatures()) {
 
                     // Find the cell corresponding to the current feature and product
@@ -53,7 +64,9 @@ public class GettingStartedTest {
                     System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
                 }
             }
-
+            output.write("</ul>");
+            output.flush();
+            
             // Export the PCM container to CSV
             CSVExporter csvExporter = new CSVExporter();
             String csv = csvExporter.export(pcmContainer);
