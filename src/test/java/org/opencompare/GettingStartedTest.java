@@ -12,7 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +24,10 @@ public class GettingStartedTest {
     @Test
     public void testGettingStarted() throws IOException {
 
-    	
+    	List<String> listX = new ArrayList<String>();
+    	List<String> listY = new ArrayList<String>();
+    	List<String> listSize = new ArrayList<String>();
+    	List<String> listColor = new ArrayList<String>();
     	
         // Define a file representing a PCM to load
         File pcmFile = new File("pcms/example.pcm");
@@ -41,48 +44,15 @@ public class GettingStartedTest {
 
         FileWriter fw = new FileWriter("html/monHtml.html", false);
 		BufferedWriter output = new BufferedWriter(fw);
- 
-		//------------------------------------
-		output.write("<!DOCTYPE html>");
-		output.write("<html>");
-		output.write("<head></head>");
-		output.write("<body>");
-		output.write("<div id=\"tester\" style=\"width:600px;height:250px;\"></div>");
-		output.write("<!-- plot.ly -->");
-		output.write("<script src=\"js/plotly-latest.min.js\"></script>");
-		output.write("<script>");
-		output.write("var data = [{");
-		output.write("x: [1, 2, 3, 4, 5],");
-		output.write("y: [1, 2, 4, 8, 16],");
-		output.write("mode: 'markers',");
-		output.write("marker: {");
-		output.write("size: [40, 60, 80, 100, 50]");
-		output.write("} }]");
-		output.write("TESTER = document.getElementById('tester');");
-		output.write("Plotly.plot( TESTER, data,{");
-		output.write("margin: { t:0 }});");
-		output.write("</script>	</body>	</html>");
-		//------------------------------------
-		
 		
         for (PCMContainer pcmContainer : pcmContainers) {
 
             // Get the PCM
             PCM pcm = pcmContainer.getPcm();
             
-//            output.write("<H1>"+pcm.getName()+"</H1>");
-//            output.write("<H2>"+pcm.getProducts().size()+" éléments</H2>");
-            
-//            output.write("<style>#chart svg {height: 400px;}</style>");
-//            output.write("<div id=\"chart\"><svg></svg></div>");
-
-
-            
-            output.write("<ul>");
             // Browse the cells of the PCM
             for (Product product : pcm.getProducts()) {
-//                output.write("<li>"+product.getKeyContent()+"</li>");
-                
+                int index = 0;
                 for (Feature feature : pcm.getConcreteFeatures()) {
 
                     // Find the cell corresponding to the current feature and product
@@ -93,12 +63,68 @@ public class GettingStartedTest {
                     String rawContent = cell.getRawContent();
                     Value interpretation = cell.getInterpretation();
 
+                    //Sélection des paramètres
+                    if (index == 1)
+                    	listX.add(content);
+                    if (index == 2)
+                    	listY.add(content);
+                    if (index == 3)
+                    	listColor.add(content);
+                    if (index == 14)
+                    	listSize.add(content);
+
+                    
                     // Print the content of the cell
-                    System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
+                    //System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
+                    index++;
                 }
             }
-//            output.write("</ul>");
+            
+            // Génération du fichier Html
+    		//------------------------------------
+    		output.write("<!DOCTYPE html>\n");
+    		output.write("<html>\n");
+    		output.write("<head></head>\n");
+    		output.write("<body>\n");
+    		output.write("<H1>"+pcm.getName()+"</H1>");
+          	output.write("<H2>"+pcm.getProducts().size()+" éléments</H2>");
+    		output.write("<div id=\"tester\" style=\"width:800px;height:500px;\"></div>\n");
+    		output.write("<!-- plot.ly -->\n");
+    		output.write("<script src=\"js/plotly-latest.min.js\"></script>\n");
+    		output.write("<script>\n");
+    		output.write("var data = [{\n");
+    		// Liste X
+    		String line = "x: [";
+    		int i=0;
+    		for(String s: listX){ if (i == 0) line += ""+ s; else line += ", " + s; i++;}
+    		line += " ],\n";
+    		output.write(line);
+    		// Liste Y
+    		i=0;
+    		line = "y: [";
+    		for(String s: listY){ if (i == 0) line += ""+ s; else line += ", " + s; i++;}
+    		line += " ],\n";
+    		output.write(line);
+    		
+    		output.write("mode: 'markers',\n");
+    		output.write("marker: {\n");
+    		// Liste Size
+    		i=0;
+    		line = "size: [";
+    		for(String s: listSize){ if (i == 0) line += ""+ s; else line += ", " + s; i++;}
+    		line += " ]";
+    		output.write(line);
+    		
+    		output.write("} }]\n");
+    		output.write("TESTER = document.getElementById('tester');\n");
+    		output.write("Plotly.plot( TESTER, data,{\n");
+    		output.write("margin: { t:0 }});\n");
+    		output.write("</script>	</body>	</html>\n");
+    		//------------------------------------
+            
             output.flush();
+            
+            
             
             // Export the PCM container to CSV
             CSVExporter csvExporter = new CSVExporter();
