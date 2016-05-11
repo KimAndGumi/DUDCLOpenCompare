@@ -12,7 +12,6 @@ import java.io.IOException;
 
 /**
  * Created by gbecan on 02/02/15.
- * Modified !
  */
 public class VisitorTest {
 

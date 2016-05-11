@@ -16,7 +16,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Created by gbecan on 02/12/15.
+ * Created by Néréide, Cédric, Jérémie, Nirina & Soleil
+ * commit > pull > push !
  */
 public class GettingStartedTest {
 
