@@ -12,10 +12,9 @@ import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class PCMGraphPlotLy extends PCMGraphConverter{
-	
-	int minColor =0;
-	int maxColor =100;
 	
 	public PCMGraphPlotLy(PCMContainer pcmContainer) {
 		super(pcmContainer);
@@ -179,5 +178,18 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 	        output.flush();
 	}
 
+	@Override
+	public String getGraphData() {
+		/*super.getGraphData();
+		ObjectMapper mapper = new ObjectMapper();
+		Staff obj = new Staff();
+
+		//Object to JSON in file
+		mapper.writeValue(new File("c:\\file.json"), obj);
+
+		//Object to JSON in String
+		String jsonInString = mapper.writeValueAsString(obj);*/
+		return null;
+	}
 
 }

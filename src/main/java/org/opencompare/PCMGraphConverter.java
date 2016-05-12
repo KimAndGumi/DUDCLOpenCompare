@@ -3,11 +3,12 @@ package org.opencompare;
 import java.io.IOException;
 
 import org.opencompare.api.java.Cell;
-import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
 import org.opencompare.api.java.Value;
+import org.opencompare.api.java.impl.value.IntegerValueImpl;
+import org.opencompare.api.java.impl.value.RealValueImpl;
 
 public abstract class PCMGraphConverter {
 
@@ -53,7 +54,7 @@ public abstract class PCMGraphConverter {
 		boolean returnVal = false;
 		
 		// On vérifie que les paramètres correspondent à des valeurs comparables
-		if (isComparable(x) && isComparable(x) && isComparable(x) && isComparable(x) ){
+		if (isComparable(x) && isComparable(y) && isComparable(color) && isComparable(size) ){
 			returnVal = true;
 		}
 		
@@ -61,21 +62,23 @@ public abstract class PCMGraphConverter {
 	}
 	
 	private boolean isComparable(int column){
-		// teste si la colonne peut etre utilisable pour un graphe
-		// Get the PCM
-        PCM pcm = this.getPcmContainer().getPcm();
+		boolean bool = false;
+		PCM pcm = this.getPcmContainer().getPcm();
 
         // Find the cell corresponding to the current feature and product
         Product product = pcm.getProducts().get(0);
         Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
-        Value interpretation = cell.getInterpretation();
-        
-        // A TERMINER !!!!!!!!!!
-
-        return true;
+		Value interpretation = cell.getInterpretation();
+        String classValue = interpretation.getClass().getName();
+        //System.out.println(classValue);
+        if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
+        	bool = true;
+        return bool;
 	}
 	
 	public String getGraphData(){
+		
+		//String json = new Gson().toJson(foo );
 		// retourne les données pour affichage dans un graphe : au format JSON
 		return null;
 	}

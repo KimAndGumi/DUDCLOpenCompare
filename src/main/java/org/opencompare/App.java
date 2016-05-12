@@ -54,12 +54,13 @@ public class App {
 			System.err.println(ioe.getMessage());
 		}
 		
+
 	}
 	public static String[] scanParametres(String[] liste){
 		String[] returnList = new String[6];
 		for(String s: liste){
 			s = s.trim();
-			String[] line = s.split(":");
+			String[] line = s.split("=");
 			switch(line[0]){
 				case "f" : returnList[0] = line[1];break;
 				case "x" : returnList[1] = line[1];break;
