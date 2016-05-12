@@ -20,6 +20,7 @@ import java.util.List;
  * commit > pull > push !
  */
 public class GettingStartedTest {
+	
 
     @Test
     public void testGettingStarted() throws IOException {
@@ -49,7 +50,7 @@ public class GettingStartedTest {
 
             // Get the PCM
             PCM pcm = pcmContainer.getPcm();
-            
+            System.out.println("Affichage d'un PcmContainer\n " + pcmContainer.getMetadata().toString());
             // Browse the cells of the PCM
             for (Product product : pcm.getProducts()) {
                 int index = 0;
