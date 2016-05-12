@@ -3,6 +3,7 @@
 	<head>
 	</head>
 	<body>
+		<!-- Pour tester vite fait plot.ly -->
 		<div id="tester" style="width:600px;height:250px;"></div>
 		<!-- plot.ly -->
 		<script src="js/plotly-latest.min.js"></script>
@@ -11,15 +12,40 @@
 		<script>
 			//peut-être l'isoler dans un .js à part ?
 			var data = [{
-			x: [1, 2, 3, 4, 5],
-			y: [1, 2, 4, 8, 16],
+			x: [1, 2, 3, 4, 5],//liste des valeurs pour l'axe x
+			y: [1, 2, 4, 8, 16],//liste des valeurs pour l'axe y
+			//
+			//
 			mode: 'markers',
 			marker: {
-			size: [40, 60, 80, 100, 50]
+			//taille des bulles
+			size: [40, 60, 80, 100, 50],//liste des valeurs pour l'axe "z" (taille)
+			//couleur des bulles
+			//color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)','rgb(93, 164, 214)'],
+			
+			cmin: 0,//valeur numérique minimum-->min(z?)
+			cmax: 100,//valeur numérique maximum-->max(z?)
+			colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],//échelle de couleur, indépendant de cmin et cmax (entre 0 et 1)
+			color: [0,20,84,50,100],//pas besoin de conversion, mettre les valeurs numériques directes
+			
+			//échelle de couleur
+			showscale : true,//afficher
+			//colorbar: {
+			//yanchor: 'top'
+			//}
 			} }]
+			var layout = {
+				title: 'Comparison of <objet> following <x_axis> and <y_axis>',
+				xaxis: {
+					title: '<x_axis>.name'
+				},
+				yaxis: {
+					title: '<y_axis>.name'
+				},
+			}
 			TESTER = document.getElementById('tester');
-			Plotly.plot( TESTER, data,{
-			margin: { t:0 }});
+			Plotly.plot( TESTER, data,layout);
+			//{margin: { t:0 }});
 		</script>
 		<!--<script src="js/plotlyTest.js"></script>-->
 	</body>
