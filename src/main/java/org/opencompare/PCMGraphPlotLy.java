@@ -6,13 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.opencompare.api.java.Cell;
-import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
 
 public class PCMGraphPlotLy extends PCMGraphConverter{
+	
+	int minColor =0;
+	int maxColor =100;
 	
 	public PCMGraphPlotLy(PCMContainer pcmContainer) {
 		super(pcmContainer);
@@ -26,30 +29,87 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 
         // Browse the cells of the PCM
         for (Product product : pcm.getProducts()) {
-            int index = 0;
-            for (Feature feature : pcm.getConcreteFeatures()) {
 
-                // Find the cell corresponding to the current feature and product
-                Cell cell = product.findCell(feature);
-
-                // Get information contained in the cell
-                String content = cell.getContent();
-                //String rawContent = cell.getRawContent();
-                //Value interpretation = cell.getInterpretation();
-
-                //Sélection des paramètres
-                if (index == column){
-                	myList.add(content);
-                	break;
-                }
-
-                // Print the content of the cell
-                //System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
-                index++;
-            }
+	        // Find the cell corresponding to the current feature and product
+	        Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+	
+	        // Get information contained in the cell
+	        String content = cell.getContent();
+	        //String rawContent = cell.getRawContent();
+	        //Value interpretation = cell.getInterpretation();
+	
+	        //Sélection des paramètres
+	       	myList.add(content);
+	
+	
+	        // Print the content of the cell
+	        //System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
         }
 		return myList;
 	}
+
+	private String getLabelElement(int column){
+		String label = "";
+		PCM pcm = this.getPcmContainer().getPcm();
+		label = pcm.getConcreteFeatures().get(column).getName();
+		return label;
+	}
+	
+	private String getTextTitles(){
+		// Retourne les textes à afficher lors du survol d'un rond du graphique
+		String titles = "['";
+		int i=0;
+		PCM pcm = this.getPcmContainer().getPcm();
+		for (Product product : pcm.getProducts()) {
+			if (i==0)
+				titles += product.getKeyContent() + "'";
+			else
+				titles += ",'" + product.getKeyContent() +"'";
+			i++;
+		}
+		titles += "]";
+		return titles;
+	}
+	
+ 	private String getMinValue(int column){
+		String min = "";
+		int i =0;
+
+        PCM pcm = this.getPcmContainer().getPcm();
+        
+        // Browse the cells of the PCM
+        for (Product product : pcm.getProducts()) {
+            // Find the cell corresponding to the current feature and product
+            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+
+            String content = cell.getContent();
+            if (StringUtils.isNumericSpace(content))
+            	if ((i==0) || Double.parseDouble(content)<Double.parseDouble(min))
+            		min = content;
+            i++;
+        }
+ 		return min;
+ 	}
+	
+	private String getMaxValue(int column){
+		String max = "";
+		int i =0;
+
+        PCM pcm = this.getPcmContainer().getPcm();
+        
+        // Browse the cells of the PCM
+        for (Product product : pcm.getProducts()) {
+            // Find the cell corresponding to the current feature and product
+            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+
+            String content = cell.getContent();
+            //if (StringUtils.isNumericSpace(content))
+        	if ((i==0) || Double.parseDouble(content)>Double.parseDouble(max))
+        		max = content;
+            i++;
+        }
+ 		return max;
+ 	}
 
 	private String getListToString( int column ){
 		int i=0;
@@ -89,16 +149,30 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 			output.write("x:" + this.getListToString(getX()) + ",\n");
 			// Liste Y
 			output.write("y:" + this.getListToString(getY()) + ",\n");
+			// informations
+			output.write("text:" + this.getTextTitles() + ",\n");
 			
 			output.write("mode: 'markers',\n");
 			output.write("marker: {\n");
 			// Liste Size
-			output.write("size:" + this.getListToString(getSize()) + "\n");
-			
+			output.write("size:" + this.getListToString(getSize()) + ",\n");
+			output.write("cmin: " + this.getMinValue(this.getColor()) + ",\n");//valeur numÃ©rique minimum-->min(z?)
+			output.write("cmax: " + this.getMaxValue(this.getColor()) + ",\n");//valeur numÃ©rique maximum-->max(z?)
+			output.write("colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],\n");
+			output.write("showscale : true,\n");
+			output.write("color:" + this.getListToString(getColor()) + ",\n");
 			output.write("} }]\n");
+			
+			// Affichage de la légende
+			output.write("var layout = {\n");
+			output.write("title: '" + pcm.getName() + "',\n");
+			output.write("xaxis: {	\n	title: '" + this.getLabelElement(this.getX()) + "'\n},\n");
+			output.write("yaxis: {	\n	title: '" + this.getLabelElement(this.getY()) + "'\n},\n");
+			output.write("}\n");
+
 			output.write("TESTER = document.getElementById('tester');\n");
-			output.write("Plotly.plot( TESTER, data,{\n");
-			output.write("margin: { t:0 }});\n");
+			output.write("Plotly.plot( TESTER, data,layout);\n");
+			//output.write("{margin: { t:0 }});\n");
 			output.write("</script>	</body>	</html>\n");
 			//------------------------------------
 	        
