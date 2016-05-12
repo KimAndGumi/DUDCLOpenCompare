@@ -1,0 +1,32 @@
+[
+	{
+		1,
+		1,
+		"super",
+		40
+	},
+	{
+		2,
+		2,
+		"B<br>size: 60<br>carré",
+		60
+	},
+	{
+		3,
+		4,
+		"C<br>size: 80<br>renversant<br>ligne 4<br>fin",
+		80
+	},
+	{
+		4,
+		8,
+		"D<br>size: 100", 
+		100
+	},
+	{
+		5,
+		16,
+		"E<br>size: -",
+		50
+	}
+]
