@@ -63,6 +63,10 @@ public abstract class PCMGraphConverter {
 		return returnVal;
 	}
 	
+	private void DummyFunction(){
+		//ceci est un test de synchronisation !
+	}
+	
 	private boolean isComparable(int column){
 		boolean bool = false;
 		PCM pcm = this.getPcmContainer().getPcm();
