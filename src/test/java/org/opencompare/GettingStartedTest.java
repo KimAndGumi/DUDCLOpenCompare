@@ -31,7 +31,7 @@ public class GettingStartedTest {
     	List<String> listColor = new ArrayList<String>();
     	
         // Define a file representing a PCM to load
-        File pcmFile = new File("pcms/example.pcm");
+        File pcmFile = new File("c:\\model\\Comparison_of_PSA_systems_0.pcm");
 
 
         // Create a loader that can handle the file format
@@ -50,7 +50,7 @@ public class GettingStartedTest {
 
             // Get the PCM
             PCM pcm = pcmContainer.getPcm();
-            System.out.println("Affichage d'un PcmContainer\n " + pcmContainer.getMetadata().toString());
+            //System.out.println("Affichage d'un PcmContainer\n " + pcmContainer.getMetadata().toString());
             // Browse the cells of the PCM
             for (Product product : pcm.getProducts()) {
                 int index = 0;
@@ -76,7 +76,8 @@ public class GettingStartedTest {
 
                     
                     // Print the content of the cell
-                    //System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
+                    System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
+                    System.out.println(interpretation.getClass().getName());
                     index++;
                 }
             }
