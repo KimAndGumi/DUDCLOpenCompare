@@ -14,12 +14,12 @@ public class App {
 		try
 		{
 			// arguments, on attends les paramètres suivants:
-			// 0 : f:chemin du fichier
-			// 1 : x:numéro de colonne du x
-			// 2 : y:numéro de colonne du y
-			// 3 : color:numéro de colonne du color
-			// 4 : size:numéro de colonne du size
-			// 5 : l:librairie à utiliser Plot.ly ou Nvd3
+			// 0 : f=chemin du fichier
+			// 1 : x=numéro de colonne du x
+			// 2 : y=numéro de colonne du y
+			// 3 : color=numéro de colonne du color
+			// 4 : size=numéro de colonne du size
+			// 5 : l=librairie à utiliser Plot.ly ou Nvd3
 			//
 			// exemple : f:pcms/example.pcm x:1 y:2 color:2 size:14 l:Plot.ly
 			

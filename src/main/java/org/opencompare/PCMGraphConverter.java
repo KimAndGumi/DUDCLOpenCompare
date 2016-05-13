@@ -1,6 +1,8 @@
 package org.opencompare;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.PCM;
@@ -87,4 +89,26 @@ public abstract class PCMGraphConverter {
 		// génération sauvage du fichier Html
 	}
 	
+	// ajoute par jeremie
+	// rend la liste de parametres des produits d'un .pcm
+	public List<String> getNameList(){
+		
+		//resultat dans product > feature > getname
+		List<String> nameList = new ArrayList<String>() ;
+		
+			// Get the PCM
+			PCM pcm = pcmContainer.getPcm();	
+            
+			Product pcmProd = pcm.getProducts().get(0); 
+			for (Cell pcmCell : pcmProd.getCells()){
+				String nomCourant = pcmCell.getFeature().getName();
+				nameList.add(nomCourant);
+				//System.out.println(pcmCell.getFeature().getName());
+			}
+		
+		//essai affichage 
+		//System.out.println(nameList.toString());
+		return nameList;
+	
+	}; //getNameList - fin
 }
