@@ -1,29 +1,47 @@
-var data = [{
-	// Liste X
-	x:[1, 2, 3, 4, 5],
-	// Liste Y
-	y:[1, 2, 4, 8, 16],
-	// informations
-	text:['a', 'b', 'c', 'd', 'e'],
-	mode: 'markers',
-	marker: {
-		// Liste Size
-		size:[40, 60, 80, 100, 50],
-		cmin: 40,
-		cmax: 100,
-		colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],
-		showscale : true,
-		color:[40, 60, 80, 100, 50],
-	}}]
+var Fichier = function Fichier(fichier)
+{
+    if(window.XMLHttpRequest) obj = new XMLHttpRequest(); //Pour Firefox, Opera,...
 
+    else if(window.ActiveXObject) obj = new ActiveXObject("Microsoft.XMLHTTP"); //Pour Internet Explorer
+
+    else return(false);
+
+
+    if (obj.overrideMimeType) obj.overrideMimeType("text/xml"); //Évite un bug de Safari
+
+
+    obj.open("GET", fichier, false);
+    obj.send(null);
+
+    if(obj.readyState == 4) return(obj.responseText);
+    else return(false);
+}
+
+var jsonString = Fichier('file.json');
+var jsonVariable = JSON.parse(jsonString);
+console.log(jsonVariable);
+var data = [{
+x: JSON.parse(jsonVariable.x),
+y: JSON.parse(jsonVariable.y),
+text: JSON.parse(jsonVariable.text),
+mode: 'markers',
+marker: {
+size:JSON.parse(jsonVariable.size),
+cmin: 800,
+cmax: 25600,
+colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],
+showscale : true,
+color:JSON.parse(jsonVariable.color),
+} }]
 var layout = {
-	title: 'Mon graphe',
-	xaxis: {
-		title: 'Text1'},
-	yaxis: {
-		title: 'Text2'},
-	}
+title: 'Comparison_of_Nikon_DSLR_cameras',
+xaxis: {
+	title: 'Weight (g)'
+},
+yaxis: {
+	title: 'Focus points'
+},
+}
 TESTER = document.getElementById('tester');
 Plotly.plot( TESTER, data,layout);
-
 {margin: { t:0 }};

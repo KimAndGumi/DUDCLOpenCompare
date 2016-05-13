@@ -12,6 +12,9 @@ import org.opencompare.api.java.Value;
 import org.opencompare.api.java.impl.value.IntegerValueImpl;
 import org.opencompare.api.java.impl.value.RealValueImpl;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 public abstract class PCMGraphConverter {
 
 	private PCMContainer pcmContainer;
