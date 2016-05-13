@@ -1,4 +1,6 @@
 target/
+pcms/model/
+html/monHtml.html
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

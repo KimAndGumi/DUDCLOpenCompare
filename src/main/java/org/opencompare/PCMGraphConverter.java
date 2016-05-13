@@ -86,5 +86,39 @@ public abstract class PCMGraphConverter {
 	public void generateHtmlFile(String file) throws IOException{
 		// génération sauvage du fichier Html
 	}
+	// ajoute par jeremie
+	// rend la liste de parametres des produits d'un .pcm
+	public List<String> getNameList(File pcmFile) throws IOException	{
+		
+		//ancien appel dans gettingStartedTest.java
+		//File pcmFile = new File("pcms/example.pcm");
+
+		// Create a loader that can handle the file format
+		PCMLoader loader = new KMFJSONLoader();
+
+		// Load the file
+		// A loader may return multiple PCM containers depending on the input format
+		// A PCM container encapsulates a PCM and its associated metadata
+		List<PCMContainer> pcmContainers = loader.load(pcmFile);
 	
+		//resultat dans product > feature > getname
+		List<String> nameList = new ArrayList<String>() ;
+		
+		for (PCMContainer pcmContainer : pcmContainers) {
+        	
+			// Get the PCM
+			PCM pcm = pcmContainer.getPcm();	
+            
+			Product pcmProd = pcm.getProducts().get(0); 
+			for (Cell pcmCell : pcmProd.getCells()){
+				String nomCourant = pcmCell.getFeature().getName();
+				nameList.add(nomCourant);
+				//System.out.println(pcmCell.getFeature().getName());
+			}
+		}
+		//essai affichage 
+		//System.out.println(nameList.toString());
+		return nameList;
+	
+	} //getNameList - fin
 }
