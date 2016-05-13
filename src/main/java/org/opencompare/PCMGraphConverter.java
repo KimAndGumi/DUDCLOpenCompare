@@ -21,7 +21,7 @@ public abstract class PCMGraphConverter {
 	private int color;
 	
 	public PCMGraphConverter(PCMContainer pcmContainer){
-		//pcmContainer : PCM à traiter
+		//pcmContainer : PCM ï¿½ traiter
 		this.pcmContainer = pcmContainer;
 	}
 	
@@ -55,7 +55,7 @@ public abstract class PCMGraphConverter {
 		
 		boolean returnVal = false;
 		
-		// On vérifie que les paramètres correspondent à des valeurs comparables
+		// On vï¿½rifie que les paramï¿½tres correspondent ï¿½ des valeurs comparables
 		if (isComparable(x) && isComparable(y) && isComparable(color) && isComparable(size) ){
 			returnVal = true;
 		}
@@ -85,12 +85,12 @@ public abstract class PCMGraphConverter {
 	public String getGraphData(){
 		
 		//String json = new Gson().toJson(foo );
-		// retourne les données pour affichage dans un graphe : au format JSON
+		// retourne les donnï¿½es pour affichage dans un graphe : au format JSON
 		return null;
 	}
 	
 	public void generateHtmlFile(String file) throws IOException{
-		// génération sauvage du fichier Html
+		// gï¿½nï¿½ration sauvage du fichier Html
 	}
 	
 	// ajoute par jeremie
@@ -115,5 +115,5 @@ public abstract class PCMGraphConverter {
 		return nameList;
 	
 	}; //getNameList - fin
-	//
+	
 }
