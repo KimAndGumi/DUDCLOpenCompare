@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
@@ -22,7 +21,34 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 		super(pcmContainer);
 	}
 	
-	private List<String> getElements(int column){
+	protected List<String> getProductTitles(){
+		// Retourne les textes à afficher lors du survol d'un rond du graphique
+		List<String> titles = new ArrayList<String>();
+		int i=0;
+		PCM pcm = this.getPcmContainer().getPcm();
+		for (Product product : pcm.getProducts())
+			titles.add(product.getKeyContent());
+
+		return titles;
+	}
+	
+	private String getTextTitles(){
+		// Retourne les textes à afficher lors du survol d'un rond du graphique
+		String titles = "['";
+		int i=0;
+		PCM pcm = this.getPcmContainer().getPcm();
+		for (Product product : pcm.getProducts()) {
+			if (i==0)
+				titles += product.getKeyContent();
+			else
+				titles += "','" + product.getKeyContent();
+			i++;
+		}
+		titles += "']";
+		return titles;
+	}
+	
+	protected List<String> getElements(int column){
 	    List<String> myList = new ArrayList<String>();
 		
 		// Get the PCM
@@ -48,80 +74,6 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
         }
 		return myList;
 	}
-
-	private String getLabelElement(int column){
-		String label = "";
-		PCM pcm = this.getPcmContainer().getPcm();
-		label = pcm.getConcreteFeatures().get(column).getName();
-		return label;
-	}
-	
-	private List<String> getProductTitles(){
-		// Retourne les textes à afficher lors du survol d'un rond du graphique
-		List<String> titles = new ArrayList<String>();
-		int i=0;
-		PCM pcm = this.getPcmContainer().getPcm();
-		for (Product product : pcm.getProducts())
-			titles.add(product.getKeyContent());
-
-		return titles;
-	}
-
-	private String getTextTitles(){
-		// Retourne les textes à afficher lors du survol d'un rond du graphique
-		String titles = "['";
-		int i=0;
-		PCM pcm = this.getPcmContainer().getPcm();
-		for (Product product : pcm.getProducts()) {
-			if (i==0)
-				titles += product.getKeyContent();
-			else
-				titles += "','" + product.getKeyContent();
-			i++;
-		}
-		titles += "']";
-		return titles;
-	}
-	
- 	private String getMinValue(int column){
-		String min = "";
-		int i =0;
-
-        PCM pcm = this.getPcmContainer().getPcm();
-        
-        // Browse the cells of the PCM
-        for (Product product : pcm.getProducts()) {
-            // Find the cell corresponding to the current feature and product
-            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
-
-            String content = cell.getContent();
-            if (StringUtils.isNumericSpace(content))
-            	if ((i==0) || Double.parseDouble(content)<Double.parseDouble(min))
-            		min = content;
-            i++;
-        }
- 		return min;
- 	}
-	
-	private String getMaxValue(int column){
-		String max = "";
-		int i =0;
-
-        PCM pcm = this.getPcmContainer().getPcm();
-        
-        // Browse the cells of the PCM
-        for (Product product : pcm.getProducts()) {
-            // Find the cell corresponding to the current feature and product
-            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
-
-            String content = cell.getContent();
-            //if (StringUtils.isNumericSpace(content))
-        	if ((i==0) || Double.parseDouble(content)>Double.parseDouble(max))
-        		max = content;
-            i++;
-        }
- 		return max;
- 	}
 
 	private String getListToString( int column ){
 		int i=0;

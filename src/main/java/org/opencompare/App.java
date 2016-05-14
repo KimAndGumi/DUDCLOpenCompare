@@ -41,14 +41,15 @@ public class App {
 	        for (PCMContainer pcmContainer : pcmContainers) {
 	        	PCMGraphConverter graph = null;
 	        	if (librairie.equals("Plot.ly"))
-	        	{
-		        	graph = new PCMGraphPlotLy(pcmContainer);
+	        	   	graph = new PCMGraphPlotLy(pcmContainer);
+		        else if (librairie.equals("Nvd3"))
+	        		graph = new PCMGraphNvd3(pcmContainer);
 		        	
-		        	if (graph.setParameters(x, y, color, size))
-		        		graph.generateHtmlFile("html/monHtml.html");
-		        	else
-		        		System.err.println("ERROR in parameters : check for numerical values in the PCM choosen columns.");
-		        }
+	        	if ((graph != null) && ( graph.setParameters(x, y, color, size)))
+	        		graph.generateHtmlFile("html/monHtml.html");
+	        	else
+	        		System.err.println("ERROR in parameters : check for numerical values in the PCM choosen columns.");
+		        
 	        }
 		}catch (IOException ioe){
 			System.err.println(ioe.getMessage());
