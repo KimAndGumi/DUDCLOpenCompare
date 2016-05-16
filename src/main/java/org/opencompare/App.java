@@ -21,8 +21,8 @@ public class App {
 			// 4 : size:numéro de colonne du size
 			// 5 : l:librairie à utiliser Plot.ly ou Nvd3
 			//
-			// exemple : f:pcms/example.pcm x:1 y:2 color:2 size:14 l:Plot.ly
-			
+			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Plot.ly
+			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Nvd3		
 			
 			String[] listeParametres = scanParametres(args);
 			

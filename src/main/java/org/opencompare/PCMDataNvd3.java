@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class PCMDataNvd3 implements Serializable{
-		
+	@XmlElement	
 	Map<String,List<PCMDataNvd3Point>> listData;
+	@XmlElement	
 	String title;
 	
 	public PCMDataNvd3( String title ){

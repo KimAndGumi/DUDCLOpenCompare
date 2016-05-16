@@ -1,48 +1,38 @@
-	nv.utils.symbolMap.set('thin-x', function(size) {	
-		size = Math.sqrt(size);							
-		return 'M' + (-size/2) + ',' + (-size/2) +		
-		'l' + size + ',' + size +						
-		'm0,' + -(size) +								
-		'l' + (-size) + ',' + size;						
-	});													
-	var chart;									
-	nv.addGraph(function() {					
-		chart = nv.models.scatterChart()		
-		.showDistX(true)						
-		.showDistY(true)						
-		.useVoronoi(true)						
-		.color(d3.scale.category10().range())	
-		.duration(300)							
-	;											
-	chart.dispatch.on('renderEnd', function(){	
-	console.log('render complete');				
-	});											
-	chart.xAxis.tickFormat(d3.format('.02f'));	
-	chart.yAxis.tickFormat(d3.format('.02f'));	
-	d3.select('#test1 svg')						
-	.datum(randomData(4,40))					
-	.call(chart);								
-	nv.utils.windowResize(chart.update);		
-	chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });	
-		return chart;							
-	});											
-	function randomData(groups, points) { //# groups,# points per group	
-		var data = [],	
-		shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],	
-		random = d3.random.normal();	
-		for (i = 0; i < groups; i++) {	
-			data.push({					
-				key: 'Group ' + i,		
-				values: []				
-			});							
-			for (j = 0; j < points; j++) {	
-				data[i].values.push({		
-					x: random(),			
-					y: random(),			
-					size: Math.round(Math.random() * 100) / 100,	
-					shape: shapes[j % shapes.length]				
-				});													
-			}														
-		}															
-		return data;												
-	}																
+var Fichier = function Fichier(fichier)
+{
+if(window.XMLHttpRequest) obj = new XMLHttpRequest(); //Pour Firefox, Opera,...
+else if(window.ActiveXObject) obj = new ActiveXObject("Microsoft.XMLHTTP"); //Pour Internet Explorer
+else return(false);
+if (obj.overrideMimeType) obj.overrideMimeType("text/xml"); //Évite un bug de Safari
+obj.open("GET", fichier, false);
+obj.send(null);
+if(obj.readyState == 4) return(obj.responseText);
+else return(false);
+}
+var jsonString = Fichier('file.json');
+var jsonVariable = JSON.parse(jsonString);
+var data = [{
+x:JSON.parse(jsonVariable.x),
+y:JSON.parse(jsonVariable.y),
+text:jsonVariable.text,
+mode: 'markers',
+marker: {
+size:JSON.parse(jsonVariable.size),
+cmin: JSON.parse(jsonVariable.minColor),
+cmax: JSON.parse(jsonVariable.maxColor),
+colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],
+showscale : true,
+color:JSON.parse(jsonVariable.color),
+} }]
+var layout = {
+title: 'Comparison_of_Nikon_DSLR_cameras',
+xaxis: {	
+	title: jsonVariable.label_x
+},
+yaxis: {	
+	title: jsonVariable.label_y
+},
+}
+TESTER = document.getElementById('tester');
+Plotly.plot( TESTER, data,layout);
+{margin: { t:0 }};

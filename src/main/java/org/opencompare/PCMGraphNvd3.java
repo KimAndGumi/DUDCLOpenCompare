@@ -30,6 +30,7 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		
 		try{
 			ObjectMapper mapper = new ObjectMapper();
+			//mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 			PCMDataNvd3 dataNvd3 = new PCMDataNvd3( pcm.getName() );
 		
 		
@@ -104,6 +105,24 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		
 //		output.write("<script>\n");
 
+		output.write("var Fichier = function Fichier(fichier)\n");
+		output.write("{\n");
+		output.write("if(window.XMLHttpRequest) obj = new XMLHttpRequest(); //Pour Firefox, Opera,...\n");
+		output.write("else if(window.ActiveXObject) obj = new ActiveXObject(\"Microsoft.XMLHTTP\"); //Pour Internet Explorer\n");
+		output.write("else return(false);\n");
+		output.write("if (obj.overrideMimeType) obj.overrideMimeType(\"text/xml\"); //Évite un bug de Safari\n");
+
+		output.write("obj.open(\"GET\", fichier, false);\n");
+		output.write("obj.send(null);\n");
+
+		output.write("if(obj.readyState == 4) return(obj.responseText);\n");
+		output.write("else return(false);\n");
+		output.write("}\n");
+
+		output.write("var jsonString = Fichier('file.json');\n");
+		output.write("var jsonVariable = JSON.parse(jsonString);\n");
+		output.write("console.log(jsonVariable);");
+		
 		   // register our custom symbols to nvd3
 		   // make sure your path is valid given any size because size scales if the chart scales.
 		output.write("	nv.utils.symbolMap.set('thin-x', function(size) {	\n");
@@ -147,7 +166,7 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("		var data = [],	\n");
 		output.write("		shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],	\n");
 		output.write("		random = d3.random.normal();	\n");
-
+/*
 		output.write("		for (i = 0; i < groups; i++) {	\n");
 		output.write("			data.push({					\n");
 		output.write("				key: 'Group ' + i,		\n");
@@ -163,7 +182,24 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("				});													\n");
 		output.write("			}														\n");
 		output.write("		}															\n");
+ */
+		output.write("			data.push({					\n");
+		output.write("				key: 'Group ' + 1,		\n");
+		output.write("				values: []				\n");
+		output.write("			});							\n");
+		output.write("			for (j = 0; j < jsonVariable.A.length; j++) {		\n");
+		output.write("				data[0].values.push({							\n");
+		output.write("					x: JSON.parse(jsonVariable.A[j].x),			\n");
+		output.write("					y: JSON.parse(jsonVariable.A[j].y),			\n");
+		output.write("					size: JSON.parse(jsonVariable.A[j].size),	\n");
+		output.write("					shape: shapes[1]							\n");
+		output.write("				});													\n");
+		output.write("			}														\n");
+						
+//		output.write("			values = jsonVariable.A;");
 
+		output.write("		console.log(jsonVariable.A[0]);												\n");
+		output.write("		console.log(data);												\n");
 		output.write("		return data;												\n");
 		output.write("	}																\n");
 
