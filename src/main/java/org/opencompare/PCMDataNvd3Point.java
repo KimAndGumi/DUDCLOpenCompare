@@ -9,6 +9,7 @@ class PCMDataNvd3Point implements Serializable{
 	public Object y;
 	public Object color;
 	public Object size;
+	public Object shape;
 	
 	public PCMDataNvd3Point(Object x, Object y, Object color, Object size) {
 		super();
@@ -16,5 +17,6 @@ class PCMDataNvd3Point implements Serializable{
 		this.y = y;
 		this.color = color;
 		this.size = size;
+		this.shape = "circle";
 	}
 }

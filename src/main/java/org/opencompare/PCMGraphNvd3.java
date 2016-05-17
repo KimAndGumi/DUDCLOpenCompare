@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
@@ -14,7 +17,6 @@ import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
 import org.opencompare.api.java.Value;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PCMGraphNvd3 extends PCMGraphConverter{
 
@@ -32,19 +34,24 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 			ObjectMapper mapper = new ObjectMapper();
 			//mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 			PCMDataNvd3 dataNvd3 = new PCMDataNvd3( pcm.getName() );
-		
-		
+			dataNvd3.label_x = this.getLabelElement(getX());
+			dataNvd3.label_y = this.getLabelElement(getY());
+			dataNvd3.features = this.getNameList();
+
+			mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
+			
 	        for (Product product : pcm.getProducts()) {
 	        	Object x = product.findCell(pcm.getConcreteFeatures().get(getX())).getContent();
 	        	Object y = product.findCell(pcm.getConcreteFeatures().get(getY())).getContent();
 	        	Object color = product.findCell(pcm.getConcreteFeatures().get(getColor())).getContent();
 	        	Object size = product.findCell(pcm.getConcreteFeatures().get(getSize())).getContent();
-	        	dataNvd3.addPoint(x,y,color,size);
+	        	dataNvd3.addPoint(product.getKeyContent(),x,y,color,size);
 	        }
 
 			//Object to JSON in file
-			mapper.writeValue(new File("html/file.json"), dataNvd3.listData );
-	
+			mapper.writeValue(new File("html/file.json"), dataNvd3 );		
+			
+			
 			//Object to JSON in String
 			//String jsonInString = mapper.writeValueAsString(obj);
 		}catch (Exception e){
@@ -102,8 +109,6 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
         
         fw = new FileWriter("html/main.js", false);
 		output = new BufferedWriter(fw);
-		
-//		output.write("<script>\n");
 
 		output.write("var Fichier = function Fichier(fichier)\n");
 		output.write("{\n");
@@ -149,6 +154,8 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 
 		output.write("	chart.xAxis.tickFormat(d3.format('.02f'));	\n");
 		output.write("	chart.yAxis.tickFormat(d3.format('.02f'));	\n");
+		output.write("	chart.xAxis.axisLabel(jsonVariable.label_x);					\n");
+		output.write("	chart.yAxis.axisLabel(jsonVariable.label_y);					\n");
 
 		output.write("	d3.select('#test1 svg')						\n");
 		output.write("	.datum(randomData(4,40))					\n");
@@ -166,46 +173,22 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("		var data = [],	\n");
 		output.write("		shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],	\n");
 		output.write("		random = d3.random.normal();	\n");
-/*
-		output.write("		for (i = 0; i < groups; i++) {	\n");
+		
 		output.write("			data.push({					\n");
-		output.write("				key: 'Group ' + i,		\n");
+		output.write("				key: jsonVariable.title,		\n");
 		output.write("				values: []				\n");
 		output.write("			});							\n");
-
-		output.write("			for (j = 0; j < points; j++) {	\n");
-		output.write("				data[i].values.push({		\n");
-		output.write("					x: random(),			\n");
-		output.write("					y: random(),			\n");
-		output.write("					size: Math.round(Math.random() * 100) / 100,	\n");
-		output.write("					shape: shapes[j % shapes.length]				\n");
+		output.write("			for (j = 0; j < jsonVariable.data.length; j++) {		\n");
+		output.write("				data[0].values.push({								\n");
+		output.write("					x: JSON.parse(jsonVariable.data[j].x),			\n");
+		output.write("					y: JSON.parse(jsonVariable.data[j].y),			\n");
+		output.write("					size: JSON.parse(jsonVariable.data[j].size),	\n");
+		output.write("					shape: shapes[1]								\n");
 		output.write("				});													\n");
 		output.write("			}														\n");
-		output.write("		}															\n");
- */
-		output.write("			data.push({					\n");
-		output.write("				key: 'Group ' + 1,		\n");
-		output.write("				values: []				\n");
-		output.write("			});							\n");
-		output.write("			for (j = 0; j < jsonVariable.A.length; j++) {		\n");
-		output.write("				data[0].values.push({							\n");
-		output.write("					x: JSON.parse(jsonVariable.A[j].x),			\n");
-		output.write("					y: JSON.parse(jsonVariable.A[j].y),			\n");
-		output.write("					size: JSON.parse(jsonVariable.A[j].size),	\n");
-		output.write("					shape: shapes[1]							\n");
-		output.write("				});													\n");
-		output.write("			}														\n");
-						
-//		output.write("			values = jsonVariable.A;");
-
-		output.write("		console.log(jsonVariable.A[0]);												\n");
-		output.write("		console.log(data);												\n");
+				
 		output.write("		return data;												\n");
 		output.write("	}																\n");
-
-//		output.write("</script>\n");
-//		output.write("</body>\n");
-//		output.write("</html>\n");
 		// -------------------------------------------------------------------
 		output.flush();
 	}
