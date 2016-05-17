@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class PCMGraphConverterTest {
-	
+	/*
 	//Test sur un PCM donné
 	protected PCMGraphConverter graph;
 	
@@ -60,14 +60,15 @@ public class PCMGraphConverterTest {
 			graph.isComparable(-1);
 			fail("isComparable devrait lancer une exception d'indices hors plage");
 		}catch (IndexOutOfBoundsException ioobe){
-			/*//Feature comparable --> entier ou réel
+			
+			//Feature comparable --> entier ou réel
 			assertTrue("Cette feature est normalement comparable",graph.isComparable(14));
 			//Feature non comparable --> autre
-			assertFalse("Cette feature n'est normalement pas comparable",graph.isComparable(10));*/
+			assertFalse("Cette feature n'est normalement pas comparable",graph.isComparable(10));
 		}
-		/*}finally{
+		}finally{
 			
-		}*/
+		}
 	}
 	
 	@Ignore
@@ -117,4 +118,5 @@ public class PCMGraphConverterTest {
 	public void testGetListToString(){
 		
 	}
+	*/
 }
