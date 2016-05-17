@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
@@ -12,9 +13,6 @@ import org.opencompare.api.java.Value;
 import org.opencompare.api.java.impl.value.IntegerValueImpl;
 import org.opencompare.api.java.impl.value.RealValueImpl;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 public abstract class PCMGraphConverter {
 
 	private PCMContainer pcmContainer;
@@ -22,7 +20,9 @@ public abstract class PCMGraphConverter {
 	private int y;
 	private int size;
 	private int color;
-	
+	/*
+	 * 
+	 */
 	public PCMGraphConverter(PCMContainer pcmContainer){
 		//pcmContainer : PCM ï¿½ traiter
 		this.pcmContainer = pcmContainer;
@@ -66,10 +66,6 @@ public abstract class PCMGraphConverter {
 		return returnVal;
 	}
 	
-	private void DummyFunction(){
-		//ceci est un test de synchronisation !
-	}
-	
 	private boolean isComparable(int column){
 		boolean bool = false;
 		PCM pcm = this.getPcmContainer().getPcm();
@@ -86,19 +82,17 @@ public abstract class PCMGraphConverter {
 	}
 	
 	public String getGraphData(){
-		
-		//String json = new Gson().toJson(foo );
-		// retourne les donnï¿½es pour affichage dans un graphe : au format JSON
+		// retourne les données pour affichage dans un graphe : au format JSON
 		return null;
 	}
 	
 	public void generateHtmlFile(String file) throws IOException{
-		// gï¿½nï¿½ration sauvage du fichier Html
+		// génération sauvage du fichier Html + JS
 	}
 	
 	// ajoute par jeremie
 	// rend la liste de parametres des produits d'un .pcm
-	public List<String> getNameList(){
+	protected List<String> getNameList(){
 		
 		//resultat dans product > feature > getname
 		List<String> nameList = new ArrayList<String>() ;
@@ -119,4 +113,51 @@ public abstract class PCMGraphConverter {
 	
 	}; //getNameList - fin
 	
+	protected String getMinValue(int column){
+		String min = "";
+		int i =0;
+
+        PCM pcm = this.getPcmContainer().getPcm();
+        
+        // Browse the cells of the PCM
+        for (Product product : pcm.getProducts()) {
+            // Find the cell corresponding to the current feature and product
+            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+
+            String content = cell.getContent();
+            if (StringUtils.isNumericSpace(content))
+            	if ((i==0) || Double.parseDouble(content)<Double.parseDouble(min))
+            		min = content;
+            i++;
+        }
+ 		return min;
+ 	}
+	
+ 	protected String getMaxValue(int column){
+		String max = "";
+		int i =0;
+
+        PCM pcm = this.getPcmContainer().getPcm();
+        
+        // Browse the cells of the PCM
+        for (Product product : pcm.getProducts()) {
+            // Find the cell corresponding to the current feature and product
+            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+
+            String content = cell.getContent();
+            //if (StringUtils.isNumericSpace(content))
+        	if ((i==0) || Double.parseDouble(content)>Double.parseDouble(max))
+        		max = content;
+            i++;
+        }
+ 		return max;
+ 	}
+	
+	protected String getLabelElement(int column){
+		String label = "";
+		PCM pcm = this.getPcmContainer().getPcm();
+		label = pcm.getConcreteFeatures().get(column).getName();
+		return label;
+	}
+
 }
