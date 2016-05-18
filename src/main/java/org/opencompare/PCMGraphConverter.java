@@ -66,7 +66,7 @@ public abstract class PCMGraphConverter {
 		return returnVal;
 	}
 	
-	private boolean isComparable(int column){
+	public boolean isComparable(int column){
 		boolean bool = false;
 		PCM pcm = this.getPcmContainer().getPcm();
 
@@ -82,12 +82,12 @@ public abstract class PCMGraphConverter {
 	}
 	
 	public String getGraphData(){
-		// retourne les données pour affichage dans un graphe : au format JSON
+		// retourne les donnï¿½es pour affichage dans un graphe : au format JSON
 		return null;
 	}
 	
 	public void generateHtmlFile(String file) throws IOException{
-		// génération sauvage du fichier Html + JS
+		// gï¿½nï¿½ration sauvage du fichier Html + JS
 	}
 	
 	// ajoute par jeremie

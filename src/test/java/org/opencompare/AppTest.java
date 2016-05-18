@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Random;
 
@@ -35,13 +36,13 @@ public class AppTest{
 	}*/
 	
 	@Test
-	public void fullTest(){
+	public void fullTest() throws IOException{
 		FileWriter fw = new FileWriter("test/log.txt", false);
 		BufferedWriter output = new BufferedWriter(fw);
 		/*FileWriter fws = new FileWriter("test/success.txt", false);
 		BufferedWriter outputs = new BufferedWriter(fw);*/
 		FileWriter fwnc = new FileWriter("test/notcomp.txt", false);
-		BufferedWriter outputnc = new BufferedWriter(fw);
+		BufferedWriter outputnc = new BufferedWriter(fwnc);
 		output.write("--- Log du test sur les 1400 PCMs---\n");
 		int count = 1;
 		int success = 0;
@@ -55,10 +56,11 @@ public class AppTest{
 				
 				//for (PCMContainer pcmc : pcmcs){
 				PCMContainer pcmc = pcmcs.get(0);
-					{
+				{
 					//Extraction du PCM
 					//PCM pcm = pcmContainer.getPcm();
 					nombreColonnes = pcmc.getPcm().getConcreteFeatures().size();
+					output.write("Il y a "+nombreColonnes+" paramètres\n");
 					//Création de l'objet graph en fonction d'un tirage aléatoire
 					output.write("PCM "+count);
 					int rnlib = rg.nextInt(1);
@@ -69,7 +71,7 @@ public class AppTest{
 						graph = new PCMGraphNvd3(pcmc);
 						output.write(" : Nvd3.js\n");
 					}
-					output.write("La liste complète des paramètres est : "+graph.getNameList());
+					output.write("La liste complète des paramètres est : "+graph.getNameList()+"\n");
 					output.write("Tirage aléatoire des 4 paramètres :\n");
 					//Tirage aléatoire des 4 paramètres
 					//Une seule vérification de "comparabilité"
@@ -101,7 +103,7 @@ public class AppTest{
 							outputnc.write("* "+pcmfile.getName()+"\n");
 							output.write("On ne peut pas tracer de graphes à partir de ce PCM.\n\n");
 						}else{
-							output.write("Ces paramètres ne permettent pas de générer un graphe.\n\n");
+							output.write("Ces paramètres ne permettent pas de générer un graphe, mais .\n\n");
 							notdone++;
 						}
 					}else{
@@ -123,8 +125,8 @@ public class AppTest{
 		}
 		catch (Exception e){
 			output.write("--- exception lors du traitement d'un PCM - STOP ---");
-			output.flush();
-			outputnc.flush();
+			//output.flush();
+			//outputnc.flush();
 		}finally{
 		output.write("Sur les "+count+" PCMs, "+success+" ont pu être générés. "+notdone+" n'ont pas pu être générés.");
 		output.flush();

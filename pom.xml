@@ -53,6 +53,22 @@
 						<source>1.8</source>
 						<target>1.8</target>
 					</configuration>
+				</plugin>	
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.19.1</version>
+					<configuration>
+						<!--<includes>
+							<include>Sample.java</include>
+						</includes>-->
+						<excludes>
+							<exclude>**/GettingData.java</exclude>
+							<exclude>**/GettingStartedTest.java</exclude>
+							<exclude>**/PCMGraphConverterTest.java</exclude>
+							<exclude>**/VisitorTest.java</exclude>
+						</excludes>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
