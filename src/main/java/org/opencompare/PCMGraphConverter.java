@@ -73,12 +73,14 @@ public abstract class PCMGraphConverter {
 		
 		Feature feat = pcm.getConcreteFeatures().get(column);
 		List<Cell> listCell = feat.getCells();
-		if (listCell != null)
+		if (listCell != null && listCell.size()>0)
 		{
-			String classValue = listCell.get(0).getInterpretation().getClass().getName();
-		    //System.out.println(classValue);
-		    if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
-		    	bool = true;
+			if (listCell.get(0).getInterpretation() != null){
+				String classValue = listCell.get(0).getInterpretation().getClass().getName();
+			    //System.out.println(classValue);
+			    if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
+			    	bool = true;
+			}
 		}
 
         return bool;

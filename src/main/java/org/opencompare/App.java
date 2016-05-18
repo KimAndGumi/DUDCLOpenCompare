@@ -1,12 +1,24 @@
 package org.opencompare;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.opencompare.api.java.PCMContainer;
+import org.opencompare.api.java.impl.PCMFactoryImpl;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
+import org.opencompare.api.java.extractor.CellContentInterpreter;
+import org.opencompare.api.java.io.CSVLoader;
 import org.opencompare.api.java.io.PCMLoader;
+
 
 public class App {
 
@@ -22,7 +34,8 @@ public class App {
 			// 5 : l:librairie à utiliser Plot.ly ou Nvd3
 			//
 			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Plot.ly
-			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Nvd3		
+			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Nvd3	
+			// f=c:/model/starwars/films.json x=1 y=2 color=5 size=14 l=Nvd3
 			
 			String[] listeParametres = scanParametres(args);
 			
@@ -35,9 +48,22 @@ public class App {
 			
 	        // Define a file representing a PCM to load
 	        File pcmFile = new File(file);
-	        PCMLoader loader = new KMFJSONLoader();
-	        List<PCMContainer> pcmContainers = loader.load(pcmFile);
+	        PCMLoader loader = null;
+	        List<PCMContainer> pcmContainers = null;
 	        
+			if (file.endsWith("json"))
+			{
+				loader = new KMFJSONLoader();
+		        pcmContainers = loader.load(JsonToCsv(pcmFile));
+			}else if (file.endsWith("pcm")){
+				loader = new KMFJSONLoader();
+		        pcmContainers = loader.load(pcmFile);
+			}else{
+				loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl())); 
+
+		        pcmContainers = loader.load(pcmFile);
+			}
+				
 	        for (PCMContainer pcmContainer : pcmContainers) {
 	        	PCMGraphConverter graph = null;
 	        	if (librairie.equals("Plot.ly"))
@@ -53,6 +79,7 @@ public class App {
 	        }
 		}catch (IOException ioe){
 			System.err.println(ioe.getMessage());
+			ioe.printStackTrace();
 		}
 		
 
@@ -72,5 +99,59 @@ public class App {
 			}					
 		}
 		return returnList;
+	}
+	
+	public static File JsonToCsv(File f){
+		File fReturn = null;
+		try{
+			HashMap<String,List<String>> listeCsv = new HashMap<String,List<String>>();
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode node = mapper.readTree(f);
+			int nb_entry = 0;
+			if (node.isArray()){
+				
+				for (JsonNode n : node){
+					JsonNode s = n.findValue("fields");
+				    Iterator<Map.Entry<String, JsonNode>> iter = s.getFields();
+				    while (iter.hasNext()) {
+				        Map.Entry<String, JsonNode> e = iter.next();
+				        String key = e.getKey();
+				        String value = e.getValue().toString();
+				        System.out.println( e.getKey() + " , " + e.getValue().toString());
+				        List<String> liste = new ArrayList<String>();
+				        if (listeCsv.containsKey(key)){
+				        	liste = listeCsv.get(key);
+				        }
+				        liste.add(value);
+				        listeCsv.put(key, liste);
+				    }
+			    	nb_entry++;
+				}
+			}
+			
+			String path = "html/" +f.getName()+".csv";
+			FileWriter newFile = new FileWriter(path);
+			Set<String> l = listeCsv.keySet();
+
+			for (String s: l)
+				newFile.write(s + "\t");
+			newFile.write("\n");
+			int i=0;
+			//System.out.println("Affichage taille : "+listeCsv.get(0).size());
+			while( i < nb_entry){
+				for (String s: l){
+					newFile.write(listeCsv.get(s).get(i)+ "\t");
+				}
+				i++;
+				newFile.write("\n");
+
+			}
+			newFile.close();
+			fReturn = new File(path);
+		}catch (Exception e){
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return fReturn;
 	}
 }
