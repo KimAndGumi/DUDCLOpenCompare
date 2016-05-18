@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.opencompare.api.java.Cell;
+import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
@@ -70,15 +71,17 @@ public abstract class PCMGraphConverter {
 	public boolean isComparable(int column){
 		boolean bool = false;
 		PCM pcm = this.getPcmContainer().getPcm();
+		
+		Feature feat = pcm.getConcreteFeatures().get(column);
+		List<Cell> listCell = feat.getCells();
+		if (listCell != null)
+		{
+			String classValue = listCell.get(0).getInterpretation().getClass().getName();
+		    //System.out.println(classValue);
+		    if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
+		    	bool = true;
+		}
 
-        // Find the cell corresponding to the current feature and product
-        Product product = pcm.getProducts().get(0);
-        Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
-		Value interpretation = cell.getInterpretation();
-        String classValue = interpretation.getClass().getName();
-        //System.out.println(classValue);
-        if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
-        	bool = true;
         return bool;
 	}
 	
@@ -91,23 +94,30 @@ public abstract class PCMGraphConverter {
 		// gï¿½nï¿½ration sauvage du fichier Html + JS
 	}
 	
-	// ajoute par jeremie
+	// ajoute par jeremie - Modifié par Cédric
 	// rend la liste de parametres des produits d'un .pcm
 	protected List<String> getNameList(){
 		
-		//resultat dans product > feature > getname
 		List<String> nameList = new ArrayList<String>() ;
-		
+		PCM pcm = pcmContainer.getPcm();	
+		for (Feature feat: pcm.getConcreteFeatures()){
+			String nomCourant = feat.getName();
+			nameList.add(nomCourant);
+		}
+			/*
+			//resultat dans product > feature > getname
+			List<String> nameList = new ArrayList<String>() ;
+			
 			// Get the PCM
 			PCM pcm = pcmContainer.getPcm();	
-            
+
 			Product pcmProd = pcm.getProducts().get(0); 
 			for (Cell pcmCell : pcmProd.getCells()){
 				String nomCourant = pcmCell.getFeature().getName();
 				nameList.add(nomCourant);
 				//System.out.println(pcmCell.getFeature().getName());
 			}
-		
+			 */
 		//essai affichage 
 		//System.out.println(nameList.toString());
 		return nameList;
