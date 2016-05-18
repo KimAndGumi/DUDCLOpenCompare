@@ -56,7 +56,7 @@ public class AppTest{
 				
 				//for (PCMContainer pcmc : pcmcs){
 				PCMContainer pcmc = pcmcs.get(0);
-				{
+				if (pcmc.getPcm().isValid()){
 					//Extraction du PCM
 					//PCM pcm = pcmContainer.getPcm();
 					nombreColonnes = pcmc.getPcm().getConcreteFeatures().size();
@@ -111,15 +111,10 @@ public class AppTest{
 						output.write("Un graphe a pu être généré.\n\n");
 						success++;
 					}
-					/*
-					Product pcmProd = pcm.getProducts().get(0);
-					for (Cell pcmCell : pcmProd.getCells()){
-						String nomCourant = pcmCell.getFeature().getName();
-						nameLis
-					}
-					*/
-					
 					count++;
+				}else{
+					output.write("Ce PCM n'est pas valide");
+					outputnc.write("* "+pcmfile.getName()+"\n");
 				}
 			}
 		}
