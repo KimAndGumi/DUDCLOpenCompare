@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+  body {
+  position: relative;
+}
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {
+	  height: 1500px;
+	  
+	}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+	  
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        padding: 15px;
+		overflow: auto;
+      }
+    }
+	button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    }
+	div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.6s ease-in-out;
+    opacity: 0;
+}
+	div.panel.show {
+    opacity: 1;
+    max-height: 500px;  
+}
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd;
+}
+
+  </style>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+     <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="http://www.productchart.com"> 
+			<img src="comparaison.jpg" height="52" width="52"> BEST CHOICE </a>
+		</li>
+	</ul> 
+	<br/>
+        <button class="accordion"><h3><a href="#section2">Specs</a></h3></button>
+		<div class="panel">
+			<form role="form">
+				<input type="range" id="myRange" value="0">
+			<div class="checkbox">
+				<label><input type="checkbox" value="">SD Card</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Dual Sim</label>
+			</div>
+			</form>
+		</div>
+		
+        <button class="accordion"><h3><a href="#section3">OS</a></h3></button>
+		<div class="panel">
+		<form role="form">
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 1</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 2</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+		</form>
+		</div>
+		
+        <button class="accordion"><h3><a href="#section3">Brand</a></h3></button>
+		<div class="panel">
+		<form role="form">
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 1</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 2</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 1</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 2</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 1</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 2</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="">Option 3</label>
+			</div>
+			
+		</form>
+		</div>
+		
+        <button class="accordion"><h3><a href="#section3">Model</a></h3></li></button>
+		
+	<div class="panel"><br>
+		<div class="input-group">
+        <input type="text" class="form-control" placeholder="Search Blog..">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+	    </div>
+	</div>
+      
+      
+		
+		<!--<ul>
+			<br><li><a href="http://twitter.com/" class="tw icon"><img src="twit.jpg"></a></li>
+			<li><a href="http://www.facebook.com/" class="fb icon" rel="nofollow"><img src="FB.png"></a></li>
+			<li><a href="http://www.youtube.com/" class="yt icon" rel="nofollow"><img src="YouT.png"></a></li>
+					
+					<!--<li>Email:<a href="https://us-mg5.mail.yahoo.com/">soheilnamdar@yahoo.com</a></p></li>
+					<li><p>Sales: +33 7 81 85 27 43 </li>
+			</ul>-->
+      
+    </div>
+
+    <div class="col-sm-10">
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="#about"><img src="index_tablets.png" height="42" width="42">TABLETS</a></li>
+		<li><a href="#about"><img src="index_cameras.png" height="42" width="42">CAMERAS</a></li>
+        <li><a href="#about"><img src="index_smartphones.png" height="42" width="42">SMARTPHONES</a></li>
+		<li><a href="#about"><img src= "index_ssd_drives.png" height="42" width="42">DRIVES</a></li>
+		<li><a href="#about"><img src= "index_flashdrives.png" height="42" width="42">FLASHDRIVES</a></li>
+		<li><a href="#about"><img src= "index_laptops.png" height="42" width="42">LAPTOPS</a></li>
+      </ul>
+    </div>
+      <hr>
+      
+      
+    </div>
+  </div>
+</div>
+
+<footer class="container-fluid">
+  <p>Footer Text</p>
+</footer>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function(){
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle("show");
+  }
+}
+</script>
+
+</body>
+</html>
