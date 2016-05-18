@@ -13,16 +13,16 @@ public class App {
 	public static void main(String[] args) {
 		try
 		{
-			// arguments, on attends les paramètres suivants:
+			// arguments, on attends les paramï¿½tres suivants:
 			// 0 : f:chemin du fichier
-			// 1 : x:numéro de colonne du x
-			// 2 : y:numéro de colonne du y
-			// 3 : color:numéro de colonne du color
-			// 4 : size:numéro de colonne du size
-			// 5 : l:librairie à utiliser Plot.ly ou Nvd3
+			// 1 : x:numï¿½ro de colonne du x
+			// 2 : y:numï¿½ro de colonne du y
+			// 3 : color:numï¿½ro de colonne du color
+			// 4 : size:numï¿½ro de colonne du size
+			// 5 : l:librairie ï¿½ utiliser Plot.ly ou Nvd3
 			//
 			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Plot.ly
-			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Nvd3		
+			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Nvd3
 			
 			String[] listeParametres = scanParametres(args);
 			
@@ -35,8 +35,12 @@ public class App {
 			
 	        // Define a file representing a PCM to load
 	        File pcmFile = new File(file);
+	        
 	        PCMLoader loader = new KMFJSONLoader();
 	        List<PCMContainer> pcmContainers = loader.load(pcmFile);
+	        
+	        //nb
+	        //int nrows = pcmContainers.size();//fnb
 	        
 	        for (PCMContainer pcmContainer : pcmContainers) {
 	        	PCMGraphConverter graph = null;
@@ -55,7 +59,6 @@ public class App {
 			System.err.println(ioe.getMessage());
 		}
 		
-
 	}
 	public static String[] scanParametres(String[] liste){
 		String[] returnList = new String[6];

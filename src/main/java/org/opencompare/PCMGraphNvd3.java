@@ -115,7 +115,7 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("if(window.XMLHttpRequest) obj = new XMLHttpRequest(); //Pour Firefox, Opera,...\n");
 		output.write("else if(window.ActiveXObject) obj = new ActiveXObject(\"Microsoft.XMLHTTP\"); //Pour Internet Explorer\n");
 		output.write("else return(false);\n");
-		output.write("if (obj.overrideMimeType) obj.overrideMimeType(\"text/xml\"); //Évite un bug de Safari\n");
+		output.write("if (obj.overrideMimeType) obj.overrideMimeType(\"text/xml\"); //ï¿½vite un bug de Safari\n");
 
 		output.write("obj.open(\"GET\", fichier, false);\n");
 		output.write("obj.send(null);\n");
@@ -145,9 +145,16 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("		.showDistX(true)						\n");
 		output.write("		.showDistY(true)						\n");
 		output.write("		.useVoronoi(true)						\n");
-		output.write("		.color(d3.scale.category10().range())	\n");
-		output.write("		.duration(300)							\n");
-		output.write("	;											\n");
+		//output.write("		.color(d3.scale.category10().range())	\n");
+		
+		output.write("		.style({fill: randomColor});			\n");
+		
+		// modif fin
+		
+		
+		
+		//output.write("		.duration(300)							\n");
+		//output.write("	;											\n");
 		output.write("	chart.dispatch.on('renderEnd', function(){	\n");
 		output.write("	console.log('render complete');				\n");
 		output.write("	});											\n");
@@ -189,6 +196,41 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 				
 		output.write("		return data;												\n");
 		output.write("	}																\n");
+		
+		// Adapted from http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+		output.write("	var randomColor = (function(){							\n");
+		output.write("  	var golden_ratio_conjugate = 0.618033988749895;		\n");
+		output.write(" 		var h = Math.random();								\n");
+		output.write(" 		var hslToRgb = function (h, s, l){					\n");
+		output.write("    	var r, g, b;										\n");
+		output.write("   	if(s == 0){											\n");
+		output.write("			r = g = b = l; 									\n");	// achromatic
+		output.write("		}else{												\n");
+		output.write("			function hue2rgb(p, q, t){						\n");
+		output.write("			if(t < 0) t += 1;								\n");
+		output.write("			if(t > 1) t -= 1;								\n");
+		output.write("			if(t < 1/6) return p + (q - p) * 6 * t;			\n");
+		output.write("			if(t < 1/2) return q;							\n");
+		output.write("			if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;	\n");
+		output.write("			return p;										\n");
+		output.write("		}													\n");
+		output.write("		var q = l < 0.5 ? l * (1 + s) : l + s - l * s;		\n");
+		output.write("		var p = 2 * l - q;									\n");
+		output.write("		r = hue2rgb(p, q, h + 1/3);							\n");					
+		output.write("		g = hue2rgb(p, q, h);								\n");
+		output.write("		b = hue2rgb(p, q, h - 1/3);							\n");
+		output.write("		}													\n");
+		output.write("		return '#'+Math.round(r * 255).toString(16)+Math.round(g * 255).toString(16)+Math.round(b * 255).toString(16);\n");
+		output.write("	};														\n");
+		output.write("	return function(){										\n");
+		output.write("			h += golden_ratio_conjugate;					\n");
+		output.write("			h %= 1;											\n");
+		output.write("			return hslToRgb(h, 0.5, 0.60);					\n");
+		output.write("		};													\n");
+		output.write("	})();													\n");
+				
+		//fin test
+		
 		// -------------------------------------------------------------------
 		output.flush();
 	}

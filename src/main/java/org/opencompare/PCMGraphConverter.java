@@ -20,6 +20,7 @@ public abstract class PCMGraphConverter {
 	private int y;
 	private int size;
 	private int color;
+	
 	/*
 	 * 
 	 */
