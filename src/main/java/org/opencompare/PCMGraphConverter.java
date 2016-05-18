@@ -93,23 +93,30 @@ public abstract class PCMGraphConverter {
 		// gï¿½nï¿½ration sauvage du fichier Html + JS
 	}
 	
-	// ajoute par jeremie
+	// ajoute par jeremie - Modifié par Cédric
 	// rend la liste de parametres des produits d'un .pcm
 	protected List<String> getNameList(){
 		
-		//resultat dans product > feature > getname
 		List<String> nameList = new ArrayList<String>() ;
-		
+		PCM pcm = pcmContainer.getPcm();	
+		for (Feature feat: pcm.getConcreteFeatures()){
+			String nomCourant = feat.getName();
+			nameList.add(nomCourant);
+		}
+			/*
+			//resultat dans product > feature > getname
+			List<String> nameList = new ArrayList<String>() ;
+			
 			// Get the PCM
 			PCM pcm = pcmContainer.getPcm();	
-            
+
 			Product pcmProd = pcm.getProducts().get(0); 
 			for (Cell pcmCell : pcmProd.getCells()){
 				String nomCourant = pcmCell.getFeature().getName();
 				nameList.add(nomCourant);
 				//System.out.println(pcmCell.getFeature().getName());
 			}
-		
+			 */
 		//essai affichage 
 		//System.out.println(nameList.toString());
 		return nameList;
