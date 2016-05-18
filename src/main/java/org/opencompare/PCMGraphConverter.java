@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.opencompare.api.java.Cell;
+import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
@@ -69,15 +70,17 @@ public abstract class PCMGraphConverter {
 	public boolean isComparable(int column){
 		boolean bool = false;
 		PCM pcm = this.getPcmContainer().getPcm();
+		
+		Feature feat = pcm.getConcreteFeatures().get(column);
+		List<Cell> listCell = feat.getCells();
+		if (listCell != null)
+		{
+			String classValue = listCell.get(0).getInterpretation().getClass().getName();
+		    //System.out.println(classValue);
+		    if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
+		    	bool = true;
+		}
 
-        // Find the cell corresponding to the current feature and product
-        Product product = pcm.getProducts().get(0);
-        Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
-		Value interpretation = cell.getInterpretation();
-        String classValue = interpretation.getClass().getName();
-        //System.out.println(classValue);
-        if ((classValue.equals(IntegerValueImpl.class.getName())) || (classValue.equals(RealValueImpl.class.getName())))
-        	bool = true;
         return bool;
 	}
 	
