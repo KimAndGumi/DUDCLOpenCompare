@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
@@ -34,7 +36,6 @@ public abstract class PCMGraphConverter {
 	 * 
 	 */
 	public PCMGraphConverter(PCMContainer pcmContainer){
-		//pcmContainer : PCM ï¿½ traiter
 		this.pcmContainer = pcmContainer;
 	}
 	
@@ -95,12 +96,11 @@ public abstract class PCMGraphConverter {
         return bool;
 	}
 	
-	public String getGraphData(){
+	public void getGraphData() throws JsonGenerationException, JsonMappingException, IOException{
 		// retourne les donnï¿½es pour affichage dans un graphe : au format JSON
-		return null;
 	}
 	
-	public void generateHtmlFile(String file) throws IOException{
+	public void generateHtmlFile(String file) throws Exception{
 		// génération sauvage du fichier Html + JS
 		
 		// Lecture et stockage du fichier HTML original dans une liste
@@ -194,9 +194,9 @@ public abstract class PCMGraphConverter {
             Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
 
             String content = cell.getContent();
-            //if (StringUtils.isNumericSpace(content))
-        	if ((i==0) || Double.parseDouble(content)>Double.parseDouble(max))
-        		max = content;
+            if (StringUtils.isNumericSpace(content))
+            	if ((i==0) || Double.parseDouble(content)>Double.parseDouble(max))
+            		max = content;
             i++;
         }
  		return max;

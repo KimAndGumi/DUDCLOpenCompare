@@ -12,6 +12,8 @@ import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -104,17 +106,16 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 	
 	
 	@Override
-	public void generateHtmlFile(String file) throws IOException{
-        super.generateHtmlFile("html/index.html");
+	public void generateHtmlFile(String file) throws Exception{
+        super.generateHtmlFile(file);
 		this.getGraphData();
 	}
 
 	@Override
-	public String getGraphData() {
-		super.getGraphData();
+	public void getGraphData() throws JsonGenerationException, JsonMappingException, IOException {
+
 		PCM pcm = getPcmContainer().getPcm();
-		
-		try{
+
 		ObjectMapper mapper = new ObjectMapper();
 		
 		PCMDataPlotLy data = new PCMDataPlotLy();
@@ -135,13 +136,6 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 		
 		//Object to JSON in file
 		mapper.writeValue(new File("html/file.json"), data );
-
-		//Object to JSON in String
-		//String jsonInString = mapper.writeValueAsString(obj);
-		}catch (Exception e){
-			System.err.println(e.getMessage());
-		}
-		return null;
 	}
 
 }

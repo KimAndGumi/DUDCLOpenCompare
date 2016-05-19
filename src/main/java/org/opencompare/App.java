@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.codehaus.jackson.JsonNode;
@@ -33,6 +34,7 @@ public class App {
 			// 3 : color:numéro de colonne du color
 			// 4 : size:numéro de colonne du size
 			// 5 : l:librairie à utiliser Plot.ly ou Nvd3
+			// 6 : Wizard
 			//
 			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Plot.ly
 			// exemple : f=pcms/example.pcm x=1 y=2 color=2 size=14 l=Nvd3	
@@ -40,53 +42,33 @@ public class App {
 			
 			String[] listeParametres = scanParametres(args);
 			
-			String file = listeParametres[0];
-			int x = Integer.parseInt(listeParametres[1]);
-			int y = Integer.parseInt(listeParametres[2]);
-			int color = Integer.parseInt(listeParametres[3]);
-			int size = Integer.parseInt(listeParametres[4]);
-			String librairie = listeParametres[5];
-			
-	        // Define a file representing a PCM to load
-	        File pcmFile = new File(file);
-	        PCMLoader loader = null;
-	        List<PCMContainer> pcmContainers = null;
-	        
-			if (file.endsWith("json"))
-			{
-				loader = new KMFJSONLoader();
-		        pcmContainers = loader.load(JsonToCsv(pcmFile));
-			}else if (file.endsWith("pcm")){
-				loader = new KMFJSONLoader();
-		        pcmContainers = loader.load(pcmFile);
-			}else{
-				loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl()), PCMDirection.PRODUCTS_AS_COLUMNS); 
-
-		        pcmContainers = loader.load(pcmFile);
-			}
-				
-	        for (PCMContainer pcmContainer : pcmContainers) {
-	        	PCMGraphConverter graph = null;
-	        	if (librairie.equals("Plot.ly"))
-	        	   	graph = new PCMGraphPlotLy(pcmContainer);
-		        else if (librairie.equals("Nvd3"))
-	        		graph = new PCMGraphNvd3(pcmContainer);
-		        	
-	        	if ((graph != null) && ( graph.setParameters(x, y, color, size)))
-	        		graph.generateHtmlFile("html/monHtml.html");
-	        	else
-	        		System.err.println("ERROR in parameters : check for numerical values in the PCM choosen columns.");
-		        
-	        }
-		}catch (IOException ioe){
+			if (("wizard").equals(listeParametres[6]))
+				launchWizard();
+			else
+				if (("?").equals(listeParametres[6])){
+					System.err.println("Help:\n\tAccepted parameters \n"
+							+ "\texpert mode : f=filename x,y,size,color=column_index l=(Plot.ly|Nvd3)"
+							+ "\tquestion mode : wizard");
+				}
+				else
+				{
+					String file = listeParametres[0];
+					int x = Integer.parseInt(listeParametres[1]);
+					int y = Integer.parseInt(listeParametres[2]);
+					int color = Integer.parseInt(listeParametres[3]);
+					int size = Integer.parseInt(listeParametres[4]);
+					String library = listeParametres[5];
+					
+					new PCMATeam(file,x,y,size,color,library);
+				}
+		}catch (Exception ioe){
 			System.err.println(ioe.getMessage());
 			ioe.printStackTrace();
 		}
-		
-
 	}
+		
 	public static String[] scanParametres(String[] liste){
-		String[] returnList = new String[6];
+		String[] returnList = new String[7];
 		for(String s: liste){
 			s = s.trim();
 			String[] line = s.split("=");
@@ -97,62 +79,57 @@ public class App {
 				case "color" : returnList[3] = line[1];break;
 				case "size" : returnList[4] = line[1];break;
 				case "l" : returnList[5] = line[1];break;
+				case "?" :	returnList[6] = line[0];break;
+				case "wizard" :  returnList[6] = line[0];break;
 			}					
 		}
 		return returnList;
 	}
 	
-	public static File JsonToCsv(File f){
-		File fReturn = null;
-		try{
-			HashMap<String,List<String>> listeCsv = new HashMap<String,List<String>>();
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode node = mapper.readTree(f);
-			int nb_entry = 0;
-			if (node.isArray()){
-				
-				for (JsonNode n : node){
-					JsonNode s = n.findValue("fields");
-				    Iterator<Map.Entry<String, JsonNode>> iter = s.getFields();
-				    while (iter.hasNext()) {
-				        Map.Entry<String, JsonNode> e = iter.next();
-				        String key = e.getKey();
-				        String value = e.getValue().toString();
-				        System.out.println( e.getKey() + " , " + e.getValue().toString());
-				        List<String> liste = new ArrayList<String>();
-				        if (listeCsv.containsKey(key)){
-				        	liste = listeCsv.get(key);
-				        }
-				        liste.add(value);
-				        listeCsv.put(key, liste);
-				    }
-			    	nb_entry++;
-				}
-			}
+	public static PCMATeam launchWizard() throws Exception{
+		Scanner sc = new Scanner(System.in);
+		String file = "";
+		File f;
+		PCMATeam pcmATeam ;
+		
+		boolean isExist = false;
+		do{
+			System.out.print("\n<Wizard Mode>\nGive us a path/filename to graph : ");
+			file = sc.nextLine();
+			f = new File(file);
 			
-			String path = "html/" +f.getName()+".csv";
-			FileWriter newFile = new FileWriter(path);
-			Set<String> l = listeCsv.keySet();
-
-			for (String s: l)
-				newFile.write(s + "\t");
-			newFile.write("\n");
-			int i=0;
-			//System.out.println("Affichage taille : "+listeCsv.get(0).size());
-			while( i < nb_entry){
-				for (String s: l){
-					newFile.write(listeCsv.get(s).get(i)+ "\t");
-				}
-				i++;
-				newFile.write("\n");
-
-			}
-			newFile.close();
-			fReturn = new File(path);
-		}catch (Exception e){
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			if (!f.exists())
+				System.out.println("\n!! The file " + file + " doesn't exist.\n");
+			else
+				isExist = true;
+		}while(!isExist);
+		
+		int i = 0;
+		System.out.println("List of the features :\n");
+		pcmATeam = new PCMATeam(file,"Plot.ly");
+		for(String s : pcmATeam.getFeaturesList()){
+			System.out.println(i + ":" + s);
+			i++;
 		}
-		return fReturn;
+		System.out.println("Choose parameters (x, y, size, color) you want to display according to the previous features list.");
+		System.out.print("x=");
+		int x = sc.nextInt();
+		System.out.print("\ny=");
+		int y = sc.nextInt();
+		System.out.print("\nsize=");
+		int size = sc.nextInt();
+		System.out.print("\ncolor=");
+		int color = sc.nextInt();
+		System.out.print("\nWhich graphic library do you want to use, Plot.ly or Nvd3 ? ");
+		String lib = "Plot.ly";
+		lib = sc.nextLine();
+		System.out.println( "Selected parameters : " + file + ","+x+","+y+","+size+","+color+","+lib );
+		System.out.println("\nEnd of Wizard Mode");
+		return new PCMATeam(file,x,y,size,color,lib);
+		
 	}
+	
+	
+	
+
 }

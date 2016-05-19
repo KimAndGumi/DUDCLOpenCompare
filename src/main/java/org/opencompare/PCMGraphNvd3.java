@@ -2,10 +2,14 @@ package org.opencompare;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
@@ -20,34 +24,30 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 	}
 
 	@Override
-	public String getGraphData() {
-		super.getGraphData();
-		// TODO Auto-generated method stub
-		PCM pcm = getPcmContainer().getPcm();
+	public void getGraphData() throws JsonGenerationException, JsonMappingException, IOException{
 		
-		try{
-			ObjectMapper mapper = new ObjectMapper();
-			PCMDataNvd3 dataNvd3 = new PCMDataNvd3( pcm.getName() );
-			dataNvd3.label_x = this.getLabelElement(getX());
-			dataNvd3.label_y = this.getLabelElement(getY());
-			dataNvd3.features = this.getNameList();
+		PCM pcm = getPcmContainer().getPcm();
 
-			mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
-			
-	        for (Product product : pcm.getProducts()) {
-	        	Object x = product.findCell(pcm.getConcreteFeatures().get(getX())).getContent();
-	        	Object y = product.findCell(pcm.getConcreteFeatures().get(getY())).getContent();
-	        	Object color = product.findCell(pcm.getConcreteFeatures().get(getColor())).getContent();
-	        	Object size = product.findCell(pcm.getConcreteFeatures().get(getSize())).getContent();
-	        	dataNvd3.addPoint(product.getKeyContent(),x,y,color,size);
-	        }
+		ObjectMapper mapper = new ObjectMapper();
+		PCMDataNvd3 dataNvd3 = new PCMDataNvd3( pcm.getName() );
+		dataNvd3.label_x = this.getLabelElement(getX());
+		dataNvd3.label_y = this.getLabelElement(getY());
+		dataNvd3.features = this.getNameList();
 
-			mapper.writeValue(new File("html/file.json"), dataNvd3 );		
-			
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return null;
+		mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
+		
+		List<Feature> listFeat = pcm.getConcreteFeatures();
+		
+        for (Product product : pcm.getProducts()) {
+        	Object x = product.findCell(listFeat.get(getX())).getContent();
+        	Object y = product.findCell(listFeat.get(getY())).getContent();
+        	Object color = product.findCell(listFeat.get(getColor())).getContent();
+        	Object size = product.findCell(listFeat.get(getSize())).getContent();
+        	dataNvd3.addPoint(product.getKeyContent(),x,y,color,size);
+        }
+
+		mapper.writeValue(new File("html/file.json"), dataNvd3 );		
+
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 	}
 	
 	@Override
-	public void generateHtmlFile(String file) throws IOException {
-		super.generateHtmlFile("html/index.html");
+	public void generateHtmlFile(String file) throws Exception {
+		super.generateHtmlFile(file);
 		this.getGraphData();
 	}
 
