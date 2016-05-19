@@ -178,12 +178,20 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("		shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],	\n");
 		output.write("		random = d3.random.normal();							\n");
 		
-		output.write("			data.push({											\n");
-		output.write("				key: jsonVariable.color,						\n");
-		output.write("				values: []										\n");
-		output.write("			});													\n");
+		//output.write("			data.push({											\n");
+		//output.write("				key: jsonVariable.product,						\n");
+		//output.write("				values: [(jasonVariable.interpretation)]										\n");
+		//output.write("			});													\n");
 		
 		output.write("		for (j = 0; j < jsonVariable.data.length; j++) {		\n");
+		
+		output.write("			data.push({											\n");
+		output.write("				key: jsonVariable.title,						\n");
+		output.write("				values: jsonVariable.features						\n");
+		output.write("			});													\n");
+		
+		
+		
 		output.write("			data[0].values.push({								\n");
 		output.write("			x: JSON.parse(jsonVariable.data[j].x),				\n");
 		output.write("			y: JSON.parse(jsonVariable.data[j].y),				\n");
