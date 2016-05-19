@@ -1,5 +1,10 @@
 package org.opencompare;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,10 @@ public abstract class PCMGraphConverter {
 	private int y;
 	private int size;
 	private int color;
+	
+	final String htmlTemplateFileName = "html/bootStrap/boot2.html";
+	final String scriptFileName = "";
+		
 	/*
 	 * 
 	 */
@@ -92,7 +101,35 @@ public abstract class PCMGraphConverter {
 	}
 	
 	public void generateHtmlFile(String file) throws IOException{
-		// gï¿½nï¿½ration sauvage du fichier Html + JS
+		// génération sauvage du fichier Html + JS
+		
+		// Lecture et stockage du fichier HTML original dans une liste
+		List<String> tabFichier = new ArrayList<String>();
+		@SuppressWarnings("resource")
+		BufferedReader inputFile = new BufferedReader(new FileReader(htmlTemplateFileName));
+		String myLine = inputFile.readLine();
+		while (myLine != null ){
+			tabFichier.add(myLine);
+			myLine = inputFile.readLine();
+		}
+		
+		// Parcours de la liste pour retrouver nos Balises pour insertion de notre code
+	    // <!--GENERATED PART BODY-->
+	    // <!--END GENERATED PART BODY-->
+		int indexBody = tabFichier.indexOf("<!--GENERATED PART BODY-->");
+
+		tabFichier.add(indexBody + 1, this.getHtmlScriptToAdd());
+
+		FileWriter fr = new FileWriter(file);
+		BufferedWriter output = new BufferedWriter(fr);
+		for(String s : tabFichier){
+			output.write(s + "\n");
+		}
+		output.close();
+	}
+	
+	protected String getHtmlScriptToAdd(){
+		return "";
 	}
 	
 	// ajoute par jeremie - Modifié par Cédric

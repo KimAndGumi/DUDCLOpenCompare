@@ -13,24 +13,24 @@
 }
     /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
     .row.content {
-	  height: 1500px;
-	  
+	  height: 800px;
+
 	}
-    
+
     /* Set gray background color and 100% height */
     .sidenav {
       background-color: #f1f1f1;
       height: 100%;
-	  
+
     }
-    
+
     /* Set black background color, white text and some padding */
     footer {
       background-color: #555;
       color: white;
       padding: 15px;
     }
-    
+
     /* On small screens, set height to 'auto' for sidenav and grid */
     @media screen and (max-width: 767px) {
       .sidenav {
@@ -54,10 +54,11 @@
     overflow: hidden;
     transition: 0.6s ease-in-out;
     opacity: 0;
+    overflow-y: auto;
 }
 	div.panel.show {
     opacity: 1;
-    max-height: 500px;  
+    max-height: 500px;
 }
 button.accordion.active, button.accordion:hover {
     background-color: #ddd;
@@ -70,143 +71,35 @@ button.accordion.active, button.accordion:hover {
   <div class="row content">
     <div class="col-sm-2 sidenav">
      <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="http://www.productchart.com"> 
-			<img src="comparaison.jpg" height="52" width="52"> BEST CHOICE </a>
+        <li class="active"><a href="https://github.com/KimAndGumi/DUDCLOpenCompare">
+			<img src="github.png" height="52" width="52"> Team DUdcl </a>
 		</li>
-	</ul> 
+	</ul>
 	<br/>
-        <button class="accordion"><h3><a href="#section2">Specs</a></h3></button>
+        <button class="accordion"><h3><a href="#section2">Features</a></h3></button>
 		<div class="panel">
 			<form role="form">
-				<input type="range" id="myRange" value="0">
-			<div class="checkbox">
-				<label><input type="checkbox" value="">SD Card</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Dual Sim</label>
-			</div>
+  			<div class="checkbox" id = "features">
+<!-- ajout des features à ce niveau via le main.js -->
+  			</div>
 			</form>
 		</div>
-		
-        <button class="accordion"><h3><a href="#section3">OS</a></h3></button>
-		<div class="panel">
-		<form role="form">
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 1</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 2</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-		</form>
-		</div>
-		
-        <button class="accordion"><h3><a href="#section3">Brand</a></h3></button>
-		<div class="panel">
-		<form role="form">
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 1</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 2</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 1</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 2</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 1</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 2</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" value="">Option 3</label>
-			</div>
-			
-		</form>
-		</div>
-		
-        <button class="accordion"><h3><a href="#section3">Model</a></h3></li></button>
-		
-	<div class="panel"><br>
-		<div class="input-group">
-        <input type="text" class="form-control" placeholder="Search Blog..">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
-        </span>
-	    </div>
-	</div>
-      
-      
-		
+
 		<!--<ul>
 			<br><li><a href="http://twitter.com/" class="tw icon"><img src="twit.jpg"></a></li>
 			<li><a href="http://www.facebook.com/" class="fb icon" rel="nofollow"><img src="FB.png"></a></li>
 			<li><a href="http://www.youtube.com/" class="yt icon" rel="nofollow"><img src="YouT.png"></a></li>
-					
+
 					<!--<li>Email:<a href="https://us-mg5.mail.yahoo.com/">soheilnamdar@yahoo.com</a></p></li>
 					<li><p>Sales: +33 7 81 85 27 43 </li>
 			</ul>-->
-      
+
     </div>
 
     <div class="col-sm-10">
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a href="#about"><img src="index_tablets.png" height="42" width="42">TABLETS</a></li>
-		<li><a href="#about"><img src="index_cameras.png" height="42" width="42">CAMERAS</a></li>
-        <li><a href="#about"><img src="index_smartphones.png" height="42" width="42">SMARTPHONES</a></li>
-		<li><a href="#about"><img src= "index_ssd_drives.png" height="42" width="42">DRIVES</a></li>
-		<li><a href="#about"><img src= "index_flashdrives.png" height="42" width="42">FLASHDRIVES</a></li>
-		<li><a href="#about"><img src= "index_laptops.png" height="42" width="42">LAPTOPS</a></li>
-      </ul>
-    </div>
       <hr>
-      
-      
+<!--GENERATED PART BODY-->
+<!--END GENERATED PART BODY-->
     </div>
   </div>
 </div>

@@ -17,6 +17,7 @@ import org.opencompare.api.java.impl.PCMFactoryImpl;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.extractor.CellContentInterpreter;
 import org.opencompare.api.java.io.CSVLoader;
+import org.opencompare.api.java.io.PCMDirection;
 import org.opencompare.api.java.io.PCMLoader;
 
 
@@ -59,7 +60,7 @@ public class App {
 				loader = new KMFJSONLoader();
 		        pcmContainers = loader.load(pcmFile);
 			}else{
-				loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl())); 
+				loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl()), PCMDirection.PRODUCTS_AS_COLUMNS); 
 
 		        pcmContainers = loader.load(pcmFile);
 			}

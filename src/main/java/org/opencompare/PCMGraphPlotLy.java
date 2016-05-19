@@ -89,134 +89,24 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 		return line;
 	}
 	
-	@SuppressWarnings("resource")
+	@Override
+	protected String getHtmlScriptToAdd(){
+		String s = "";
+		PCM pcm = getPcmContainer().getPcm();
+		
+		s = "<H3><center>"+pcm.getName()+"</center></H3>\n";
+      	s += "<div id=\"tester\" style=\"height:800px;\"></div>\n";
+		s += "<script src=\"js/plotly-latest.min.js\"></script>\n";
+		s += "<script src=\"functions.js\" type=\"text/javascript\"></script>\n";
+		s += "<script src=\"mainPlotly.js\" type=\"text/javascript\"></script>\n";
+		return s;
+	}
+	
+	
 	@Override
 	public void generateHtmlFile(String file) throws IOException{
-        
-		// Génération du fichier Html
-		//------------------------------------
-/*
-			PCM pcm = getPcmContainer().getPcm();
-			
-	        FileWriter fw = new FileWriter("html/monHtml.html", false);
-			BufferedWriter output = new BufferedWriter(fw);
-
-			output.write("<!DOCTYPE html>\n");
-			output.write("<html>\n");
-			output.write("<head></head>\n");
-			output.write("<body>\n");
-			output.write("<H1>"+pcm.getName()+"</H1>");
-	      	output.write("<H2>"+pcm.getProducts().size()+" éléments</H2>");
-			output.write("<div id=\"tester\" style=\"width:800px;height:500px;\"></div>\n");
-			output.write("<!-- plot.ly -->\n");
-			output.write("<script src=\"js/plotly-latest.min.js\"></script>\n");
-			output.write("<script>\n");
-			output.write("var data = [{\n");
-			// Liste X
-			output.write("x:" + this.getListToString(getX()) + ",\n");
-			// Liste Y
-			output.write("y:" + this.getListToString(getY()) + ",\n");
-			// informations
-			output.write("text:" + this.getTextTitles() + ",\n");
-			
-			output.write("mode: 'markers',\n");
-			output.write("marker: {\n");
-			// Liste Size
-			output.write("size:" + this.getListToString(getSize()) + ",\n");
-			output.write("cmin: " + this.getMinValue(this.getColor()) + ",\n");//valeur numÃ©rique minimum-->min(z?)
-			output.write("cmax: " + this.getMaxValue(this.getColor()) + ",\n");//valeur numÃ©rique maximum-->max(z?)
-			output.write("colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],\n");
-			output.write("showscale : true,\n");
-			output.write("color:" + this.getListToString(getColor()) + ",\n");
-			output.write("} }]\n");
-			
-			// Affichage de la légende
-			output.write("var layout = {\n");
-			output.write("title: '" + pcm.getName() + "',\n");
-			output.write("xaxis: {	\n	title: '" + this.getLabelElement(this.getX()) + "'\n},\n");
-			output.write("yaxis: {	\n	title: '" + this.getLabelElement(this.getY()) + "'\n},\n");
-			output.write("}\n");
-
-			output.write("TESTER = document.getElementById('tester');\n");
-			output.write("Plotly.plot( TESTER, data,layout);\n");
-			//output.write("{margin: { t:0 }});\n");
-			output.write("</script>	</body>	</html>\n");
-			//------------------------------------
-*/
-			PCM pcm = getPcmContainer().getPcm();
-
-			// ******************************* Generation du fichier Html ************************
-	        FileWriter fw = new FileWriter("html/monHtml.html", false);
-			BufferedWriter output = new BufferedWriter(fw);
-			output.write("<!DOCTYPE html>\n");
-			output.write("<html>\n");
-			output.write("<head></head>\n");
-			output.write("<body>\n");
-			output.write("<H1>"+pcm.getName()+"</H1>");
-	      	output.write("<H2>"+pcm.getProducts().size()+" éléments</H2>");
-			output.write("<div id=\"tester\" style=\"width:800px;height:500px;\"></div>\n");
-			output.write("<!-- plot.ly -->\n");
-			output.write("<script src=\"js/plotly-latest.min.js\"></script>\n");
-			output.write("<script src=\"main.js\" type=\"text/javascript\"></script>\n");
-			output.write("</body>\n	</html>\n");
-	        output.flush();
-
-			// ******************************* Génération du JSON ******************************
-			this.getGraphData();
-	        
-	        // ******************************* Generation du fichier JS ************************
-	        
-	        fw = new FileWriter("html/main.js", false);
-			output = new BufferedWriter(fw);
-			
-			output.write("var Fichier = function Fichier(fichier)\n");
-			output.write("{\n");
-			output.write("if(window.XMLHttpRequest) obj = new XMLHttpRequest(); //Pour Firefox, Opera,...\n");
-			output.write("else if(window.ActiveXObject) obj = new ActiveXObject(\"Microsoft.XMLHTTP\"); //Pour Internet Explorer\n");
-			output.write("else return(false);\n");
-			output.write("if (obj.overrideMimeType) obj.overrideMimeType(\"text/xml\"); //Évite un bug de Safari\n");
-
-			output.write("obj.open(\"GET\", fichier, false);\n");
-			output.write("obj.send(null);\n");
-
-			output.write("if(obj.readyState == 4) return(obj.responseText);\n");
-			output.write("else return(false);\n");
-			output.write("}\n");
-
-			output.write("var jsonString = Fichier('file.json');\n");
-			output.write("var jsonVariable = JSON.parse(jsonString);\n");
-			
-			output.write("var data = [{\n");
-			// Liste X
-			output.write("x:JSON.parse(jsonVariable.x),\n");
-			// Liste Y
-			output.write("y:JSON.parse(jsonVariable.y),\n");
-			// informations
-			output.write("text:jsonVariable.text,\n");
-			
-			output.write("mode: 'markers',\n");
-			output.write("marker: {\n");
-			// Liste Size
-			output.write("size:JSON.parse(jsonVariable.size),\n");
-			output.write("cmin: JSON.parse(jsonVariable.minColor),\n");//valeur numÃ©rique minimum-->min(z?)
-			output.write("cmax: JSON.parse(jsonVariable.maxColor),\n");//valeur numÃ©rique maximum-->max(z?)
-			output.write("colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],\n");
-			output.write("showscale : true,\n");
-			output.write("color:JSON.parse(jsonVariable.color),\n");
-			output.write("} }]\n");
-			
-			// Affichage de la légende
-			output.write("var layout = {\n");
-			output.write("title: '" + pcm.getName() + "',\n");
-			output.write("xaxis: {	\n	title: jsonVariable.label_x\n},\n");
-			output.write("yaxis: {	\n	title: jsonVariable.label_y\n},\n");
-			output.write("}\n");
-
-			output.write("TESTER = document.getElementById('tester');\n");
-			output.write("Plotly.plot( TESTER, data,layout);\n");
-			output.write("{margin: { t:0 }};\n");
-
-	        output.flush();
+        super.generateHtmlFile("html/index.html");
+		this.getGraphData();
 	}
 
 	@Override
