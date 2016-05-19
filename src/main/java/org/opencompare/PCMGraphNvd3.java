@@ -93,7 +93,11 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("</head>\n");
 		output.write("<body>\n");
 
-
+		//<div id="svg_area" style="height:500px;">
+	  	//	<svg id="out" width="1000" height="500">
+	  	//	</svg>
+	  	//</div>
+		
 		output.write("	<div id=\"test1\" class='with-3d-shadow with-transitions'>\n");
 		output.write("		<svg></svg>\n");
 		output.write("	</div>\n");
@@ -105,9 +109,9 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		
 		// ******************************* Generation du fichier JSON **********************
 		this.getGraphData();
-        // ******************************* Generation du fichier JS ************************
-        
-        fw = new FileWriter("html/main.js", false);
+		// ******************************* Generation du fichier JS ************************
+	    
+	    fw = new FileWriter("html/main.js", false);
 		output = new BufferedWriter(fw);
 
 		output.write("var Fichier = function Fichier(fichier)\n");
@@ -117,122 +121,82 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 		output.write("else return(false);\n");
 		output.write("if (obj.overrideMimeType) obj.overrideMimeType(\"text/xml\"); //�vite un bug de Safari\n");
 
-		output.write("obj.open(\"GET\", fichier, false);\n");
-		output.write("obj.send(null);\n");
+		output.write("obj.open(\"GET\", fichier, false);							\n");
+		output.write("obj.send(null);												\n");
 
-		output.write("if(obj.readyState == 4) return(obj.responseText);\n");
-		output.write("else return(false);\n");
-		output.write("}\n");
+		output.write("if(obj.readyState == 4) return(obj.responseText);				\n");
+		output.write("else return(false);											\n");
+		output.write("}																\n");
 
-		output.write("var jsonString = Fichier('file.json');\n");
-		output.write("var jsonVariable = JSON.parse(jsonString);\n");
+		output.write("var jsonString = Fichier('file.json');						\n");
+		output.write("var jsonVariable = JSON.parse(jsonString);					\n");
 		output.write("console.log(jsonVariable);");
 		
 		   // register our custom symbols to nvd3
 		   // make sure your path is valid given any size because size scales if the chart scales.
-		output.write("	nv.utils.symbolMap.set('thin-x', function(size) {	\n");
-		output.write("		size = Math.sqrt(size);							\n");
-		output.write("		return 'M' + (-size/2) + ',' + (-size/2) +		\n");
-		output.write("		'l' + size + ',' + size +						\n");
-		output.write("		'm0,' + -(size) +								\n");
-		output.write("		'l' + (-size) + ',' + size;						\n");
-		output.write("	});													\n");
+		output.write("	nv.utils.symbolMap.set('thin-x', function(size) {			\n");
+		output.write("		size = Math.sqrt(size);									\n");
+		output.write("		return 'M' + (-size/2) + ',' + (-size/2) +				\n");
+		output.write("		'l' + size + ',' + size +								\n");
+		output.write("		'm0,' + -(size) +										\n");
+		output.write("		'l' + (-size) + ',' + size;								\n");
+		output.write("	});															\n");
 
 		   // create the chart
-		output.write("	var chart;									\n");
-		output.write("	nv.addGraph(function() {					\n");
-		output.write("		chart = nv.models.scatterChart()		\n");
-		output.write("		.showDistX(true)						\n");
-		output.write("		.showDistY(true)						\n");
-		output.write("		.useVoronoi(true)						\n");
-		//output.write("		.color(d3.scale.category10().range())	\n");
+		output.write("	var chart;													\n");
+		output.write("	nv.addGraph(function() {									\n");
+		output.write("		chart = nv.models.scatterChart()						\n");
+		output.write("		.showDistX(true)										\n");
+		output.write("		.showDistY(true)										\n");
+		output.write("		.useVoronoi(true)										\n");
+		output.write("		.color(d3.scale.category10().range())					\n");
+		output.write("		.duration(300)											\n");
 		
-		output.write("		.style({fill: randomColor});			\n");
-		
-		// modif fin
-		
-		
-		
-		//output.write("		.duration(300)							\n");
-		//output.write("	;											\n");
-		output.write("	chart.dispatch.on('renderEnd', function(){	\n");
-		output.write("	console.log('render complete');				\n");
-		output.write("	});											\n");
+		output.write("	chart.dispatch.on('renderEnd', function(){					\n");
+		output.write("	console.log('render complete');								\n");
+		output.write("	});															\n");
 
-		output.write("	chart.xAxis.tickFormat(d3.format('.02f'));	\n");
-		output.write("	chart.yAxis.tickFormat(d3.format('.02f'));	\n");
-		output.write("	chart.xAxis.axisLabel(jsonVariable.label_x);					\n");
-		output.write("	chart.yAxis.axisLabel(jsonVariable.label_y);					\n");
+		output.write("	chart.xAxis.tickFormat(d3.format('.02f'));					\n");
+		output.write("	chart.yAxis.tickFormat(d3.format('.02f'));					\n");
+		output.write("	chart.xAxis.axisLabel(jsonVariable.label_x);				\n");
+		output.write("	chart.yAxis.axisLabel(jsonVariable.label_y);				\n");
 
-		output.write("	d3.select('#test1 svg')						\n");
-		output.write("	.datum(randomData(4,40))					\n");
-		output.write("	.call(chart);								\n");
+		output.write("	d3.select('#test1 svg')										\n");
+		output.write("	.datum(randomData(4,40))									\n");
+		output.write("	.call(chart);												\n");
 
-		output.write("	nv.utils.windowResize(chart.update);		\n");
+		output.write("	nv.utils.windowResize(chart.update);						\n");
 
 		output.write("	chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });	\n");
-		output.write("		return chart;							\n");
-		output.write("	});											\n");
-
-
+		output.write("		return chart;											\n");
+		output.write("	});															\n");
+		
+		
 		output.write("	function randomData(groups, points) { //# groups,# points per group	\n");
 		       // smiley and thin-x are our custom symbols!
-		output.write("		var data = [],	\n");
+		output.write("		var data = [],											\n");
 		output.write("		shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],	\n");
-		output.write("		random = d3.random.normal();	\n");
+		output.write("		random = d3.random.normal();							\n");
 		
-		output.write("			data.push({					\n");
-		output.write("				key: jsonVariable.title,		\n");
-		output.write("				values: []				\n");
-		output.write("			});							\n");
-		output.write("			for (j = 0; j < jsonVariable.data.length; j++) {		\n");
-		output.write("				data[0].values.push({								\n");
-		output.write("					x: JSON.parse(jsonVariable.data[j].x),			\n");
-		output.write("					y: JSON.parse(jsonVariable.data[j].y),			\n");
-		output.write("					size: JSON.parse(jsonVariable.data[j].size),	\n");
-		output.write("					shape: shapes[1]								\n");
-		output.write("				});													\n");
-		output.write("			}														\n");
+		output.write("			data.push({											\n");
+		output.write("				key: jsonVariable.color,						\n");
+		output.write("				values: []										\n");
+		output.write("			});													\n");
+		
+		output.write("		for (j = 0; j < jsonVariable.data.length; j++) {		\n");
+		output.write("			data[0].values.push({								\n");
+		output.write("			x: JSON.parse(jsonVariable.data[j].x),				\n");
+		output.write("			y: JSON.parse(jsonVariable.data[j].y),				\n");
+		output.write("			size: JSON.parse(jsonVariable.data[j].size),		\n");
+		output.write("			shape: shapes[1]									\n");
+		
+		output.write("			});													\n");
+		output.write("		}														\n");
 				
-		output.write("		return data;												\n");
-		output.write("	}																\n");
+		output.write("		return data;											\n");
+		output.write("	}															\n");
+		//output.write("	}														\n");
 		
-		// Adapted from http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
-		output.write("	var randomColor = (function(){							\n");
-		output.write("  	var golden_ratio_conjugate = 0.618033988749895;		\n");
-		output.write(" 		var h = Math.random();								\n");
-		output.write(" 		var hslToRgb = function (h, s, l){					\n");
-		output.write("    	var r, g, b;										\n");
-		output.write("   	if(s == 0){											\n");
-		output.write("			r = g = b = l; 									\n");	// achromatic
-		output.write("		}else{												\n");
-		output.write("			function hue2rgb(p, q, t){						\n");
-		output.write("			if(t < 0) t += 1;								\n");
-		output.write("			if(t > 1) t -= 1;								\n");
-		output.write("			if(t < 1/6) return p + (q - p) * 6 * t;			\n");
-		output.write("			if(t < 1/2) return q;							\n");
-		output.write("			if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;	\n");
-		output.write("			return p;										\n");
-		output.write("		}													\n");
-		output.write("		var q = l < 0.5 ? l * (1 + s) : l + s - l * s;		\n");
-		output.write("		var p = 2 * l - q;									\n");
-		output.write("		r = hue2rgb(p, q, h + 1/3);							\n");					
-		output.write("		g = hue2rgb(p, q, h);								\n");
-		output.write("		b = hue2rgb(p, q, h - 1/3);							\n");
-		output.write("		}													\n");
-		output.write("		return '#'+Math.round(r * 255).toString(16)+Math.round(g * 255).toString(16)+Math.round(b * 255).toString(16);\n");
-		output.write("	};														\n");
-		output.write("	return function(){										\n");
-		output.write("			h += golden_ratio_conjugate;					\n");
-		output.write("			h %= 1;											\n");
-		output.write("			return hslToRgb(h, 0.5, 0.60);					\n");
-		output.write("		};													\n");
-		output.write("	})();													\n");
-				
-		//fin test
-		
-		// -------------------------------------------------------------------
 		output.flush();
 	}
-
 }
