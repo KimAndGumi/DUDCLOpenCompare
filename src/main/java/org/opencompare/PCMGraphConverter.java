@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -34,6 +37,7 @@ public abstract class PCMGraphConverter {
 	
 	final String htmlTemplateFileName = "html/bootStrap/boot2.html";
 	final String scriptFileName = "";
+	final String jsonGeneratedFile = "html/file.json";
 		
 	/*
 	 * 
@@ -82,9 +86,8 @@ public abstract class PCMGraphConverter {
 	
 	public boolean isComparable(int column){
 		boolean bool = false;
-		PCM pcm = this.getPcmContainer().getPcm();
 		
-		Feature feat = pcm.getConcreteFeatures().get(column);
+		Feature feat = this.getFeatures().get(column);
 		List<Cell> listCell = feat.getCells();
 		if (listCell != null && listCell.size()>0)
 		{
@@ -136,17 +139,15 @@ public abstract class PCMGraphConverter {
 	}
 	
 	// ajoute par jeremie - Modifié par Cédric
-	// rend la liste de parametres des produits d'un .pcm
+	// rend la liste des parametres des produits d'un .pcm
 	protected List<String> getNameList(){
 		
 		List<String> nameList = new ArrayList<String>() ;
-		PCM pcm = pcmContainer.getPcm();
-		List<Feature> listFeat = pcm.getConcreteFeatures();
+		List<Feature> listFeat = this.getFeatures();
 
-		for (Feature feat: listFeat){
-			String nomCourant = feat.getName();
-			nameList.add(nomCourant);
-		}
+		for (Feature feat: listFeat)
+			nameList.add(feat.getName());
+		
 			/*
 			//resultat dans product > feature > getname
 			List<String> nameList = new ArrayList<String>() ;
@@ -167,6 +168,26 @@ public abstract class PCMGraphConverter {
 	
 	}; //getNameList - fin
 	
+	
+	// Récupère les Features et les classe suivant le GetName()
+	@SuppressWarnings("unchecked")
+	protected List<Feature> getFeatures(){
+		PCM pcm = pcmContainer.getPcm();
+		
+		Comparator comparator = new Comparator(){
+				@Override
+				public int compare(Object o1, Object o2) {
+					// TODO Auto-generated method stub
+					String s1 = ((Feature) o1).getName();
+					String s2 = ((Feature) o2).getName();
+					return s1.compareTo(s2);
+				}
+		};
+		List<Feature> listFeat = pcm.getConcreteFeatures();
+		Collections.sort( listFeat ,comparator);
+		return listFeat;
+	}
+	
 	protected String getMinValue(int column){
 		String min = "";
 		int i =0;
@@ -176,7 +197,7 @@ public abstract class PCMGraphConverter {
         // Browse the cells of the PCM
         for (Product product : pcm.getProducts()) {
             // Find the cell corresponding to the current feature and product
-            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+            Cell cell = product.findCell(this.getFeatures().get(column));
 
             String content = cell.getContent();
             if (NumberUtils.isNumber(content))//     		StringUtils.isNumericSpace(content))
@@ -196,7 +217,7 @@ public abstract class PCMGraphConverter {
         // Browse the cells of the PCM
         for (Product product : pcm.getProducts()) {
             // Find the cell corresponding to the current feature and product
-            Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+            Cell cell = product.findCell(this.getFeatures().get(column));
 
             String content = cell.getContent();
             if (NumberUtils.isNumber(content))//     		StringUtils.isNumericSpace(content))            if (StringUtils.isNumericSpace(content))
@@ -209,8 +230,7 @@ public abstract class PCMGraphConverter {
 	
 	protected String getLabelElement(int column){
 		String label = "";
-		PCM pcm = this.getPcmContainer().getPcm();
-		label = pcm.getConcreteFeatures().get(column).getName();
+		label = this.getFeatures().get(column).getName();
 		return label;
 	}
 

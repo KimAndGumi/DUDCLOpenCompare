@@ -36,7 +36,7 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
 
 		mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 		
-		List<Feature> listFeat = pcm.getConcreteFeatures();
+		List<Feature> listFeat = this.getFeatures();
 		
         for (Product product : pcm.getProducts()) {
         	Object x = product.findCell(listFeat.get(getX())).getContent();
@@ -46,7 +46,7 @@ public class PCMGraphNvd3 extends PCMGraphConverter{
         	dataNvd3.addPoint(product.getKeyContent(),x,y,color,size);
         }
 
-		mapper.writeValue(new File("html/file.json"), dataNvd3 );		
+		mapper.writeValue(new File(jsonGeneratedFile), dataNvd3 );		
 
 	}
 

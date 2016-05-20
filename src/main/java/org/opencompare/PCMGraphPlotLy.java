@@ -1,8 +1,6 @@
 package org.opencompare;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,6 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 	protected List<String> getProductTitles(){
 		// Retourne les textes à afficher lors du survol d'un rond du graphique
 		List<String> titles = new ArrayList<String>();
-		int i=0;
 		PCM pcm = this.getPcmContainer().getPcm();
 		for (Product product : pcm.getProducts())
 			titles.add(product.getKeyContent());
@@ -60,7 +57,7 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
         for (Product product : pcm.getProducts()) {
 
 	        // Find the cell corresponding to the current feature and product
-	        Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
+	        Cell cell = product.findCell(this.getFeatures().get(column));
 	
 	        // Get information contained in the cell
 	        String content = cell.getContent();
@@ -135,7 +132,7 @@ public class PCMGraphPlotLy extends PCMGraphConverter{
 		data.maxColor = this.getMaxValue(this.getColor());
 		
 		//Object to JSON in file
-		mapper.writeValue(new File("html/file.json"), data );
+		mapper.writeValue(new File(jsonGeneratedFile), data );
 	}
 
 }
