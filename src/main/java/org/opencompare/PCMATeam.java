@@ -20,6 +20,8 @@ import org.opencompare.api.java.io.CSVLoader;
 import org.opencompare.api.java.io.PCMDirection;
 import org.opencompare.api.java.io.PCMLoader;
 
+import com.opencsv.CSVWriter;
+
 public class PCMATeam {
 
 	PCMGraphConverter graph;
@@ -62,13 +64,13 @@ public class PCMATeam {
         List<PCMContainer> pcmContainers = null;
         
 		if (file.endsWith("json")){
-			loader = new KMFJSONLoader();
-	        pcmContainers = loader.load(JsonToCsv(pcmFile));
+	        loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl()),PCMDirection.PRODUCTS_AS_LINES);
+	        pcmContainers = loader.load(JsonToCsv(pcmFile));       
 		}else if (file.endsWith("pcm")){
 			loader = new KMFJSONLoader();
 	        pcmContainers = loader.load(pcmFile);
 		}else if (file.endsWith("csv")){
-			loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl()), PCMDirection.PRODUCTS_AS_LINES); 
+			loader = new CSVLoader(new PCMFactoryImpl(), new CellContentInterpreter(new PCMFactoryImpl()),PCMDirection.PRODUCTS_AS_LINES); 
 	        pcmContainers = loader.load(pcmFile);
 		}else
 			System.err.println("ERROR in filename : " + file + " is not a recognized format.");
@@ -130,29 +132,40 @@ public class PCMATeam {
 				        if (listeCsv.containsKey(key)){
 				        	liste = listeCsv.get(key);
 				        }
-				        liste.add(value);
+				        liste.add(value.replace(",", "")); // suppression de la virgule en cas de champs multiple ou 1000 format US
 				        listeCsv.put(key, liste);
 				    }
 			    	nb_entry++;
 				}
 			}
-			
+					
 			String path = "html/" +f.getName()+".csv";
 			FileWriter newFile = new FileWriter(path);
 			Set<String> l = listeCsv.keySet();
-
-			for (String s: l)
-				newFile.write(s + "\t");
-			newFile.write("\n");
 			int i=0;
-			//System.out.println("Affichage taille : "+listeCsv.get(0).size());
-			while( i < nb_entry){
-				for (String s: l){
-					newFile.write(listeCsv.get(s).get(i)+ "\t");
-				}
+			for (String s: l){
+				if (i==0)
+					newFile.write(s);
+				else
+					newFile.write("," + s);
 				i++;
+			}
+			newFile.write("\n");
+			i=0;
+			while( i < nb_entry){
+				int j=0;
+				for (String s: l){
+					String str = listeCsv.get(s).get(i).replaceAll("\"", "");
+					if (listeCsv.get(s).get(i).indexOf("unknown")>=0 || listeCsv.get(s).get(i).indexOf("null")>=0 || listeCsv.get(s).get(i).indexOf("indefinite")>=0 || listeCsv.get(s).get(i).indexOf("n/a")>=0)
+						str = "0";
+					if (j==0)
+						newFile.write(str);
+					else
+						newFile.write("," + str);
+					j++;
+				}
 				newFile.write("\n");
-
+				i++;
 			}
 			newFile.close();
 			fReturn = new File(path);
