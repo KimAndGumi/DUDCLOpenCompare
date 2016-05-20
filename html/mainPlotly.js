@@ -8,7 +8,7 @@ marker: {
 size:JSON.parse(jsonVariable.size),
 cmin: JSON.parse(jsonVariable.minColor),
 cmax: JSON.parse(jsonVariable.maxColor),
-colorscale: [[0,'rgb(100,50,24)'],[1,'rgb(56,100,33)']],
+colorscale: [[0,'rgb(0,0,255)'],[0.5,'rgb(255,255,0)'],[1,'rgb(255,0,0)']],
 showscale : true,
 color:JSON.parse(jsonVariable.color),
 } }]

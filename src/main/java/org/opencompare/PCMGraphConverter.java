@@ -8,8 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.opencompare.api.java.Cell;
@@ -137,8 +140,10 @@ public abstract class PCMGraphConverter {
 	protected List<String> getNameList(){
 		
 		List<String> nameList = new ArrayList<String>() ;
-		PCM pcm = pcmContainer.getPcm();	
-		for (Feature feat: pcm.getConcreteFeatures()){
+		PCM pcm = pcmContainer.getPcm();
+		List<Feature> listFeat = pcm.getConcreteFeatures();
+
+		for (Feature feat: listFeat){
 			String nomCourant = feat.getName();
 			nameList.add(nomCourant);
 		}
@@ -174,7 +179,7 @@ public abstract class PCMGraphConverter {
             Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
 
             String content = cell.getContent();
-            if (StringUtils.isNumericSpace(content))
+            if (NumberUtils.isNumber(content))//     		StringUtils.isNumericSpace(content))
             	if ((i==0) || Double.parseDouble(content)<Double.parseDouble(min))
             		min = content;
             i++;
@@ -194,7 +199,7 @@ public abstract class PCMGraphConverter {
             Cell cell = product.findCell(pcm.getConcreteFeatures().get(column));
 
             String content = cell.getContent();
-            if (StringUtils.isNumericSpace(content))
+            if (NumberUtils.isNumber(content))//     		StringUtils.isNumericSpace(content))            if (StringUtils.isNumericSpace(content))
             	if ((i==0) || Double.parseDouble(content)>Double.parseDouble(max))
             		max = content;
             i++;

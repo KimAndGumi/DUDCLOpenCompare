@@ -120,9 +120,11 @@ public class App {
 		int size = sc.nextInt();
 		System.out.print("\ncolor=");
 		int color = sc.nextInt();
+		String lib = "";
 		System.out.print("\nWhich graphic library do you want to use, Plot.ly or Nvd3 ? ");
-		String lib = "Plot.ly";
-		lib = sc.nextLine();
+		do{
+			lib = sc.nextLine();
+		}while( !(lib.equals("Plot.ly") || lib.equals("Nvd3")) );
 		System.out.println( "Selected parameters : " + file + ","+x+","+y+","+size+","+color+","+lib );
 		System.out.println("\nEnd of Wizard Mode");
 		return new PCMATeam(file,x,y,size,color,lib);
