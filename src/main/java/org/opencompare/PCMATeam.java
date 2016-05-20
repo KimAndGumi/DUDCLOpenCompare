@@ -97,9 +97,15 @@ public class PCMATeam {
 	
 	public List<String> getFeaturesList(){
 		// return all Features labels for the wizard
+		// All numerical Feature has <num> prefix
 		List<String> l = new ArrayList<String>();
 		if (graph != null)
-			l = graph.getNameList();	
+			l = graph.getNameList();
+			for (int i =0; i<l.size(); i++){
+				if (graph.isComparable(i))
+					l.set(i, "<num>" + l.get(i));
+			}
+				
 		return l;
 	}
 	
@@ -119,7 +125,7 @@ public class PCMATeam {
 				        Map.Entry<String, JsonNode> e = iter.next();
 				        String key = e.getKey();
 				        String value = e.getValue().toString();
-				        System.out.println( e.getKey() + " , " + e.getValue().toString());
+				        //System.out.println( e.getKey() + " , " + e.getValue().toString());
 				        List<String> liste = new ArrayList<String>();
 				        if (listeCsv.containsKey(key)){
 				        	liste = listeCsv.get(key);
